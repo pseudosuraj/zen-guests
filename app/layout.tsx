@@ -2,14 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: "--font-inter"
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Zen-Guests | Hotel Upselling & Guest Service Platform",
-  description: "WhatsApp-native upselling and guest-service platform for Indian hospitality industry",
+  title: "Zen Guests - Hotel Guest Experience Platform",
+  description: "Revolutionary hotel guest experience and revenue optimization platform",
 };
 
 export default function RootLayout({
@@ -18,11 +15,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className={`${inter.className} antialiased bg-background text-foreground`}>
-        <div className="min-h-screen">
-          {children}
-        </div>
+    <html lang="en">
+      <body className={inter.className}>
+        {children}
       </body>
     </html>
   );
