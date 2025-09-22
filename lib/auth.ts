@@ -1,3 +1,4 @@
+// lib/auth.ts
 import type { NextAuthOptions } from "next-auth"
 import EmailProvider from "next-auth/providers/email"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
@@ -22,20 +23,11 @@ export const authOptions: NextAuthOptions = {
       maxAge: 24 * 60 * 60,
     }),
   ],
-  pages: {
-    signIn: "/owner/login",
-  },
+  pages: { signIn: "/owner/login" },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // After successful email verification, redirect to dashboard
-      if (url.startsWith("/")) {
-        return `${baseUrl}${url}`
-      }
-      // For same origin URLs, allow them
-      if (new URL(url).origin === baseUrl) {
-        return url
-      }
-      // Default redirect to dashboard for successful logins
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      if (new URL(url).origin === baseUrl) return url
       return `${baseUrl}/owner/dashboard`
     },
   },
