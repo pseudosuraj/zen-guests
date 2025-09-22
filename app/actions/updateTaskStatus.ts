@@ -1,20 +1,28 @@
 // app/actions/updateTaskStatus.ts
-'use server';
+'use server'
 
-import { prisma } from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { PrismaClient } from '@prisma/client'
 
-export async function updateTaskStatus(taskId: string, newStatus: 'IN_PROGRESS' | 'COMPLETE') {
+const prisma = new PrismaClient()
+
+export async function updateTaskStatus(taskId: string, status: string) {
+  if (!taskId?.trim()) {
+    throw new Error('Task ID is required')
+  }
+
+  if (!status?.trim()) {
+    throw new Error('Status is required')
+  }
+
   try {
-    await prisma.serviceTask.update({
-      where: { id: parseInt(taskId) },
-      data: { status: newStatus },
-    });
+    const updatedTask = await prisma.serviceTask.update({
+      where: { id: taskId },
+      data: { status, updatedAt: new Date() },
+    })
 
-    // Instantly refresh the dashboard to show the change
-    revalidatePath('/owner/dashboard');
+    return updatedTask
   } catch (error) {
-    console.error('Error updating task status:', error);
-    throw error;
+    console.error('Error updating task status:', error)
+    throw new Error('Failed to update task status')
   }
 }

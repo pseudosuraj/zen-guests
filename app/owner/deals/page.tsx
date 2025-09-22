@@ -58,7 +58,7 @@ export default function DealManagerPage() {
     }
 
     try {
-      await deleteDeal(deal.id);
+      await deleteDeal(String(deal.id))
       // Refresh the deals list
       await fetchDeals();
       alert('Deal deleted successfully!');

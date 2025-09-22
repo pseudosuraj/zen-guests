@@ -1,19 +1,14 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql" // or your database provider
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Your existing models (keep these as they are)
-// Add any existing models you already have here
-
-// NextAuth.js Required Models
+// NextAuth models (keep these - already working)
 model Account {
   id                String  @id @default(cuid())
   userId            String  @map("user_id")
@@ -47,8 +42,8 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("emailVerified")
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
   sessions      Session[]
@@ -63,4 +58,34 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+// prisma/schema.prisma (excerpt with the two business models)
+
+model UpsellDeal {
+  id          String   @id @default(cuid())
+  name        String
+  price       Decimal  @db.Decimal(10, 2)
+  description String?
+  imageUrl    String?
+  type        String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("upsell_deals")
+}
+
+model ServiceTask {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  status      String   @default("pending")
+  priority    String   @default("medium")
+  assignedTo  String?
+  roomNumber  String?              // ← added to match seed.ts
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("service_tasks")
 }
