@@ -26,15 +26,17 @@ export const authOptions: NextAuthOptions = {
     signIn: "/owner/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.sub = (user as any).id
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user && token?.sub) {
-        (session.user as any).id = token.sub
+    async redirect({ url, baseUrl }) {
+      // After successful email verification, redirect to dashboard
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`
       }
-      return session
+      // For same origin URLs, allow them
+      if (new URL(url).origin === baseUrl) {
+        return url
+      }
+      // Default redirect to dashboard for successful logins
+      return `${baseUrl}/owner/dashboard`
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
