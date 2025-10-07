@@ -1,0 +1,6 @@
+Folder PATH listing
+Volume serial number is 0000009B 3CEC:70BB
+C:\USERS\HP\ZEN-GUESTS\APP\API\AUTH
+\---[...nextauth]
+        route.ts
+        

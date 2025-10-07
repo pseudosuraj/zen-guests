@@ -21,12 +21,24 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: { signIn: "/owner/login" },
+  
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      if (new URL(url).origin === baseUrl) return url
-      return `${baseUrl}/owner/dashboard`
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
+  async signIn({ user }) {
+    // Auto-assign demo hotel to new users without one
+    if (user.email) {
+      const dbUser = await prisma.user.findUnique({
+        where: { email: user.email },
+      })
+      
+      if (dbUser && !dbUser.hotelId) {
+        await prisma.user.update({
+          where: { email: user.email },
+          data: { hotelId: 'demo-hotel-123' }
+        })
+      }
+    }
+    return true
+  }
+}
+
 }

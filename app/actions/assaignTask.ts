@@ -1,4 +1,4 @@
-// app/actions/updateTaskStatus.ts
+// app/actions/assignTask.ts
 'use server'
 
 import { PrismaClient } from '@prisma/client'
@@ -8,10 +8,7 @@ import { authOptions } from '@/lib/auth'
 
 const prisma = new PrismaClient()
 
-export async function updateTaskStatus(
-  taskId: string,
-  newStatus: 'pending' | 'in-progress' | 'complete'
-) {
+export async function assignTask(taskId: string, staffName: string | null) {
   try {
     // 1) Verify authentication
     const session = await getServerSession(authOptions)
@@ -29,7 +26,7 @@ export async function updateTaskStatus(
       throw new Error('No hotel linked to user')
     }
 
-    // 3) Verify task belongs to this hotel (security check)
+    // 3) Verify task belongs to this hotel
     const task = await prisma.serviceTask.findUnique({
       where: { id: taskId },
       select: { hotelId: true },
@@ -39,24 +36,24 @@ export async function updateTaskStatus(
       throw new Error('Task not found or access denied')
     }
 
-    // 4) Update the task status
+    // 4) Update task assignment
     const updatedTask = await prisma.serviceTask.update({
       where: { id: taskId },
-      data: { 
-        status: newStatus,
+      data: {
+        assignedTo: staffName,
         updatedAt: new Date(),
       },
     })
 
-    // 5) Revalidate dashboard to show changes immediately
+    // 5) Revalidate pages
     revalidatePath('/owner/dashboard')
+    revalidatePath('/owner/tasks')
 
-    console.log(`✅ Task ${taskId} updated to ${newStatus}`)
-    
+    console.log(`✅ Task ${taskId} assigned to ${staffName || 'unassigned'}`)
+
     return { success: true, task: updatedTask }
-    
   } catch (error) {
-    console.error('❌ Update task status error:', error)
+    console.error('❌ Assign task error:', error)
     throw error
   }
 }

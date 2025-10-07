@@ -1,82 +1,128 @@
 // prisma/seed.ts
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Start seeding...');
+  console.log('🌱 Starting database seed...')
 
-  // Clear existing data for fresh seeding
-  await prisma.serviceTask.deleteMany();
-  await prisma.upsellDeal.deleteMany();
+  // 1. Create demo hotel
+  const hotel = await prisma.hotel.upsert({
+    where: { id: 'demo-hotel-123' },
+    update: {},
+    create: {
+      id: 'demo-hotel-123',
+      name: 'The Grand Mumbai',
+      brandColor: '#6366F1', // Purple/indigo color
+    },
+  })
 
-  // Create realistic UpsellDeal records
-  console.log('📦 Creating UpsellDeal records...');
-  await prisma.upsellDeal.createMany({
+  console.log('✓ Created demo hotel:', hotel.name)
+
+  // 2. Create demo user (hotel owner)
+  const user = await prisma.user.upsert({
+    where: { email: 'owner@grandmumbai.com' },
+    update: {},
+    create: {
+      email: 'owner@grandmumbai.com',
+      name: 'Hotel Owner',
+      hotelId: hotel.id,
+    },
+  })
+
+  console.log('✓ Created demo user:', user.email)
+
+  // 3. Create upsell deals
+  await prisma.upsellDeal.deleteMany({ where: { hotelId: hotel.id } })
+  
+  const deals = await prisma.upsellDeal.createMany({
     data: [
       {
         name: 'Premium Suite Upgrade',
-        price: 2499.00,
-        description: 'Upgrade to our luxurious premium suite with panoramic city view, king-size bed, marble bathroom, complimentary minibar, and express checkout service.',
-        imageUrl: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400',
-        type: 'ROOM_UPGRADE'
+        price: 2499,
+        description: 'Upgrade to our Premium Suite with city view, complimentary minibar, and express checkout.',
+        imageUrl: '/images/room.jpg',
+        type: 'ROOM_UPGRADE',
+        active: true,
+        hotelId: hotel.id,
       },
       {
         name: 'Gourmet Breakfast Buffet',
-        price: 899.00,
-        description: 'Start your day with our award-winning breakfast buffet featuring South Indian delicacies, Continental favorites, fresh tropical fruits, and barista-made coffee.',
-        imageUrl: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=400',
-        type: 'FOOD_BEVERAGE'
+        price: 899,
+        description: 'Start your day with our award-winning breakfast buffet featuring South Indian and Continental cuisine.',
+        imageUrl: '/images/breakfast.jpg',
+        type: 'FOOD_BEVERAGE',
+        active: true,
+        hotelId: hotel.id,
       },
       {
         name: 'Local Biryani Delivery',
-        price: 299.00,
-        description: 'Experience authentic Mumbai biryani from the famous Paradise Restaurant, delivered hot to your room with traditional accompaniments and dessert.',
-        imageUrl: 'https://images.unsplash.com/photo-1563379091339-03246963d51a?w=400',
-        type: 'FOOD_BEVERAGE'
+        price: 450,
+        description: 'Authentic Hyderabadi biryani from the best local restaurants, delivered fresh by our concierge team.',
+        imageUrl: '/images/biryani.jpg',
+        type: 'FOOD_BEVERAGE',
+        active: true,
+        hotelId: hotel.id,
       },
       {
-        name: 'Mumbai City Tour Experience',
-        price: 1299.00,
-        description: 'Private guided tour of Mumbai\'s iconic landmarks including Gateway of India, Marine Drive, and Dhobi Ghat with luxury transport and lunch included.',
-        imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400',
-        type: 'EXPERIENCE'
-      }
-    ]
-  });
+        name: 'OTT Premium Package',
+        price: 499,
+        description: 'Netflix, Prime Video, Disney+ Hotstar access on your room TV plus complimentary popcorn.',
+        imageUrl: '/images/ott.jpg',
+        type: 'EXPERIENCE',
+        active: true,
+        hotelId: hotel.id,
+      },
+    ],
+  })
 
-  // Create realistic ServiceTask records (some completed for demo)
-  console.log('✅ Creating ServiceTask records...');
-  await prisma.serviceTask.createMany({
+  console.log(`✓ Created ${deals.count} upsell deals`)
+
+  // 4. Create service tasks
+  await prisma.serviceTask.deleteMany({ where: { hotelId: hotel.id } })
+  
+  const tasks = await prisma.serviceTask.createMany({
     data: [
       {
-        title: 'Room 204: Extra Towels Request',
-        status: 'COMPLETE',
-        roomNumber: '204'
+        title: 'Extra Towels Request',
+        description: 'Guest requested additional towels',
+        status: 'pending',
+        priority: 'high',
+        roomNumber: '204',
+        hotelId: hotel.id,
       },
       {
-        title: 'Room 318: Late Checkout Request',
-        status: 'COMPLETE',
-        roomNumber: '318'
+        title: 'Late Checkout Request',
+        description: 'Guest needs to checkout at 2 PM instead of 12 PM',
+        status: 'pending',
+        priority: 'medium',
+        roomNumber: '318',
+        hotelId: hotel.id,
       },
       {
-        title: 'Room 102: Room Service - Coffee & Snacks',
-        status: 'IN_PROGRESS',
-        roomNumber: '102'
-      }
-    ]
-  });
+        title: 'Room Service - Coffee & Snacks',
+        description: 'Complimentary welcome refreshments',
+        status: 'in-progress',
+        priority: 'high',
+        roomNumber: '102',
+        assignedTo: 'Housekeeping Staff',
+        hotelId: hotel.id,
+      },
+    ],
+  })
 
-  console.log('🎉 Seeding finished successfully!');
-  console.log('✅ Created 4 UpsellDeal records');
-  console.log('✅ Created 3 ServiceTask records');
+  console.log(`✓ Created ${tasks.count} service tasks`)
+
+  console.log('🎉 Seed completed successfully!')
+  console.log('\n📧 Demo login email: owner@grandmumbai.com')
+  console.log('🏨 Demo hotel ID: demo-hotel-123')
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error during seeding:', e);
-    process.exit(1);
+    console.error('❌ Seed failed:', e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })

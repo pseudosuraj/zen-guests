@@ -1,56 +1,62 @@
-// app/owner/dashboard/page.tsx
-'use client';
+'use client'
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { updateTaskStatus } from "@/app/actions/updateTaskStatus";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Clock } from "lucide-react"
 
 interface ServiceTask {
-  id: number;
-  title: string;
-  status: string;
-  roomNumber: string;
-  createdAt: string;
+  id: string
+  title: string
+  status: string
+  roomNumber: string
+  createdAt: string
+  priority: string
 }
 
 export default function OwnerDashboardPage() {
-  const [tasks, setTasks] = useState<ServiceTask[]>([]);
+  const [tasks, setTasks] = useState<ServiceTask[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    void fetchTasks();
-  }, []);
+    void fetchTasks()
+  }, [])
 
   async function fetchTasks() {
     try {
-      const res = await fetch("/api/tasks", { cache: "no-store" });
+      setLoading(true)
+      const res = await fetch("/api/tasks", { cache: "no-store" })
       if (!res.ok) {
-        console.error("GET /api/tasks failed with", res.status);
-        setTasks([]);
-        return;
+        console.error("GET /api/tasks failed with", res.status)
+        setTasks([])
+        return
       }
-      const data = (await res.json()) as ServiceTask[];
-      setTasks(data.slice(0, 4));
+      const data = (await res.json()) as ServiceTask[]
+      const activeTasks = data.filter(t => t.status !== 'complete')
+      setTasks(activeTasks.slice(0, 5))
     } catch (error) {
-      console.error("GET /api/tasks error:", error);
-      setTasks([]);
+      console.error("GET /api/tasks error:", error)
+      setTasks([])
+    } finally {
+      setLoading(false)
     }
   }
 
-  // Helper function to create form action handlers
-  function createTaskAction(taskId: string, newStatus: 'IN_PROGRESS' | 'COMPLETE') {
-    return async (formData: FormData) => {
-      await updateTaskStatus(taskId, newStatus);
-      // Refresh the task list after update
-      await fetchTasks();
-    };
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMinutes = Math.floor((now.getTime() - date.getTime()) / 60000)
+    
+    if (diffMinutes < 1) return 'Just now'
+    if (diffMinutes < 60) return `${diffMinutes}m ago`
+    if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h ago`
+    return date.toLocaleDateString()
   }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Page Header */}
       <div className="border-b bg-white">
         <div className="mx-auto max-w-6xl px-4 py-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Your Hotel Dashboard</h1>
@@ -63,7 +69,6 @@ export default function OwnerDashboardPage() {
       <div className="mx-auto max-w-6xl px-4 py-8 space-y-8">
         {/* KPI Cards */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Revenue Intelligence */}
           <Card className="shadow-sm">
             <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
@@ -97,7 +102,6 @@ export default function OwnerDashboardPage() {
             </CardContent>
           </Card>
 
-          {/* OTA Commission Saved */}
           <Card className="shadow-sm">
             <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
@@ -128,91 +132,94 @@ export default function OwnerDashboardPage() {
           </Card>
         </div>
 
-        {/* Summary Row: Interactive Urgent Tasks + Top Deals */}
+        {/* Summary Row */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Interactive Urgent Tasks */}
+          {/* Urgent Tasks - READ ONLY */}
           <Card className="bg-white shadow-sm">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">Urgent Tasks</CardTitle>
                 <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                  {tasks.length}
+                  {tasks.length} Active
                 </Badge>
               </div>
-              <CardDescription>Real-time requests from guests - Click to manage</CardDescription>
+              <CardDescription>Click any task to assign staff in Task Manager</CardDescription>
             </CardHeader>
             <CardContent>
-              {tasks.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">
-                  No pending tasks. Guest requests will appear here in real-time.
-                </p>
+              {loading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+                  <p className="text-sm text-gray-500 mt-2">Loading tasks...</p>
+                </div>
+              ) : tasks.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="text-4xl mb-2">✅</div>
+                  <p className="text-gray-500 font-medium">No pending tasks</p>
+                  <p className="text-sm text-gray-400 mt-1">All guest requests handled!</p>
+                </div>
               ) : (
-                <ul className="space-y-4">
+                <div className="space-y-3">
                   {tasks.map((task) => (
-                    <li key={task.id} className="p-4 border rounded-lg bg-gray-50">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <p className="font-medium text-gray-900">{task.title}</p>
-                          <p className="text-xs text-gray-500">
-                            Room {task.roomNumber} • {new Date(task.createdAt).toLocaleTimeString()}
-                          </p>
+                    <Link 
+                      key={task.id} 
+                      href="/owner/tasks"
+                      className="block p-4 border rounded-lg bg-gray-50 hover:bg-white hover:shadow-md hover:border-purple-300 transition-all cursor-pointer group"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                              {task.title}
+                            </p>
+                            {task.priority === 'high' && (
+                              <Badge variant="destructive" className="text-xs">High Priority</Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-3 text-sm text-gray-600">
+                            <span className="flex items-center gap-1">
+                              🛏️ Room {task.roomNumber}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              {formatTime(task.createdAt)}
+                            </span>
+                          </div>
                         </div>
                         <Badge 
                           variant="outline" 
-                          className={`${
-                            task.status === 'PENDING' 
-                              ? 'border-yellow-300 text-yellow-700 bg-yellow-50' 
-                              : task.status === 'IN_PROGRESS'
-                              ? 'border-blue-300 text-blue-700 bg-blue-50'
-                              : 'border-green-300 text-green-700 bg-green-50'
-                          }`}
+                          className={
+                            task.status === 'pending'
+                              ? 'border-yellow-300 text-yellow-700 bg-yellow-50'
+                              : 'border-blue-300 text-blue-700 bg-blue-50'
+                          }
                         >
-                          {task.status}
+                          {task.status === 'in-progress' ? 'In Progress' : 'Pending'}
                         </Badge>
                       </div>
-
-                      {/* Interactive Action Buttons - FIXED TYPE ERRORS */}
-                      <div className="flex gap-2 justify-end">
-                        {task.status === 'PENDING' && (
-                          <>
-                            <form action={createTaskAction(task.id.toString(), 'IN_PROGRESS')}>
-                              <Button type="submit" size="sm" variant="outline" className="text-xs">
-                                Start Progress
-                              </Button>
-                            </form>
-                            <form action={createTaskAction(task.id.toString(), 'COMPLETE')}>
-                              <Button type="submit" size="sm" className="bg-green-600 hover:bg-green-700 text-xs">
-                                Mark Complete
-                              </Button>
-                            </form>
-                          </>
-                        )}
-
-                        {task.status === 'IN_PROGRESS' && (
-                          <form action={createTaskAction(task.id.toString(), 'COMPLETE')}>
-                            <Button type="submit" size="sm" className="bg-green-600 hover:bg-green-700 text-xs">
-                              Mark Complete
-                            </Button>
-                          </form>
-                        )}
-
-                        {task.status === 'COMPLETE' && (
-                          <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
-                            ✅ Completed
-                          </Badge>
-                        )}
+                      
+                      <div className="mt-2 flex items-center gap-1 text-xs text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Click to manage and assign staff</span>
+                        <ArrowRight className="w-3 h-3" />
                       </div>
-                    </li>
+                    </Link>
                   ))}
-                </ul>
+                </div>
               )}
 
-              <div className="mt-6 flex justify-between">
-                <Button variant="outline" onClick={() => void fetchTasks()} className="text-sm">
-                  Refresh
+              <div className="mt-6 flex justify-between items-center">
+                <Button 
+                  variant="outline" 
+                  onClick={() => void fetchTasks()} 
+                  className="text-sm"
+                  disabled={loading}
+                >
+                  {loading ? 'Refreshing...' : '🔄 Refresh'}
                 </Button>
                 <Button asChild className="bg-purple-600 hover:bg-purple-700">
-                  <Link href="/owner/tasks">Go to Task Manager</Link>
+                  <Link href="/owner/tasks">
+                    View All Tasks
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -262,5 +269,5 @@ export default function OwnerDashboardPage() {
         </div>
       </div>
     </main>
-  );
+  )
 }

@@ -1,4 +1,5 @@
 // prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,7 +9,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// NextAuth models (keep these - already working)
+/**
+ * Multi-tenancy:
+ * - Hotel is the tenant.
+ * - User, UpsellDeal, ServiceTask all belong to a Hotel via required hotelId.
+ * - Useful indexes on hotelId to scope queries efficiently.
+ */
+
+/**
+ * ---------- Tenant ----------
+ */
+model Hotel {
+  id         String   @id @default(cuid())
+  name       String
+  brandColor String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  users User[]
+  deals UpsellDeal[]
+  tasks ServiceTask[]
+
+  @@map("hotels")
+}
+
+/**
+ * ---------- Auth (NextAuth) ----------
+ */
 model Account {
   id                String  @id @default(cuid())
   userId            String  @map("user_id")
@@ -34,7 +62,8 @@ model Session {
   sessionToken String   @unique @map("session_token")
   userId       String   @map("user_id")
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
@@ -45,9 +74,16 @@ model User {
   email         String    @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  accounts      Account[]
-  sessions      Session[]
 
+  // Multi-tenant link (required)
+  hotelId String
+  hotel   Hotel?  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  // Auth relations
+  accounts Account[]
+  sessions Session[]
+
+  @@index([hotelId])
   @@map("users")
 }
 
@@ -60,8 +96,9 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
-// prisma/schema.prisma (excerpt with the two business models)
-
+/**
+ * ---------- Business Models ----------
+ */
 model UpsellDeal {
   id          String   @id @default(cuid())
   name        String
@@ -73,6 +110,11 @@ model UpsellDeal {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Multi-tenant link (required)
+  hotelId String
+  hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  @@index([hotelId])
   @@map("upsell_deals")
 }
 
@@ -83,9 +125,14 @@ model ServiceTask {
   status      String   @default("pending")
   priority    String   @default("medium")
   assignedTo  String?
-  roomNumber  String?              // ← added to match seed.ts
+  roomNumber  String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Multi-tenant link (required)
+  hotelId String
+  hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  @@index([hotelId])
   @@map("service_tasks")
 }
