@@ -106,15 +106,16 @@ export default function StaffDashboardPage() {
     router.push('/staff/login')
   }
 
-  function getTaskVisual(title: string, description: string | null): TaskVisual {
+    function getTaskVisual(title: string, description: string | null): TaskVisual {
     const lowerTitle = title.toLowerCase()
     const lowerDesc = (description || '').toLowerCase()
     const combined = lowerTitle + ' ' + lowerDesc
     
-    // Minibar items
+    // Minibar items - Beverages & Snacks
     if (combined.includes('minibar') || combined.includes('coke') || combined.includes('sprite') || 
         combined.includes('lays') || combined.includes('kurkure') || combined.includes('kitkat') ||
-        combined.includes('bisleri') || combined.includes('snack') || combined.includes('chip')) {
+        combined.includes('bisleri') || combined.includes('snack') || combined.includes('chip') ||
+        combined.includes('beverage')) {
       return { icon: '🥤', bgColor: 'bg-blue-50', label: 'Minibar Delivery' }
     }
     
@@ -126,19 +127,19 @@ export default function StaffDashboardPage() {
       return { icon: '🍽️', bgColor: 'bg-orange-50', label: 'Food Service' }
     }
     
-    // Towels
+    // Towels - Better representation
     if (combined.includes('towel')) {
-      return { icon: '🛁', bgColor: 'bg-cyan-50', label: 'Towel Request' }
+      return { icon: '🧺', bgColor: 'bg-cyan-50', label: 'Towel Request' }
     }
     
-    // Water
+    // Water - Actual bottle representation
     if (combined.includes('water') || combined.includes('bottle')) {
-      return { icon: '💧', bgColor: 'bg-blue-50', label: 'Water Delivery' }
+      return { icon: '🍶', bgColor: 'bg-blue-50', label: 'Water Delivery' }
     }
     
     // Laundry
     if (combined.includes('laundry') || combined.includes('wash') || combined.includes('cloth')) {
-      return { icon: '👔', bgColor: 'bg-purple-50', label: 'Laundry Pickup' }
+      return { icon: '🧺', bgColor: 'bg-purple-50', label: 'Laundry Pickup' }
     }
     
     // Medicine
@@ -152,14 +153,15 @@ export default function StaffDashboardPage() {
       return { icon: '🧹', bgColor: 'bg-green-50', label: 'Housekeeping' }
     }
     
-    // Spa/Wellness
+    // Spa/Wellness - Better representation
     if (combined.includes('spa') || combined.includes('massage')) {
-      return { icon: '🧖‍♀️', bgColor: 'bg-pink-50', label: 'Spa Service' }
+      return { icon: '💆', bgColor: 'bg-pink-50', label: 'Spa Service' }
     }
     
     // Default
     return { icon: '🛎️', bgColor: 'bg-gray-50', label: 'Room Service' }
   }
+
 
   function formatTime(dateString: string) {
     const date = new Date(dateString)
