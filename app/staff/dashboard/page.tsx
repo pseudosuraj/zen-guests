@@ -134,7 +134,7 @@ export default function StaffDashboardPage() {
     
     // Water - Actual bottle representation
     if (combined.includes('water') || combined.includes('bottle')) {
-      return { icon: '🍶', bgColor: 'bg-blue-50', label: 'Water Delivery' }
+      return { icon: '🚰', bgColor: 'bg-black-50', label: 'Water Delivery' }
     }
     
     // Laundry
