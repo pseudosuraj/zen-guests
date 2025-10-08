@@ -358,7 +358,7 @@ export default function GuestPortalPage({ params }: PageProps) {
                   🛒 Digital Minibar
                 </h2>
                 <p className="text-sm text-gray-600">
-                  Same price as local stores • Instant delivery
+                  • Instant delivery • Instant Happiness 
                 </p>
               </div>
 
