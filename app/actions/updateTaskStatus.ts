@@ -3,8 +3,6 @@
 
 import { PrismaClient } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 
 const prisma = new PrismaClient()
 
@@ -13,33 +11,21 @@ export async function updateTaskStatus(
   newStatus: 'pending' | 'in-progress' | 'complete'
 ) {
   try {
-    // 1) Verify authentication
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.email) {
-      throw new Error('Unauthorized')
-    }
+    console.log('🔄 Updating task status:', { taskId, newStatus })
 
-    // 2) Get user's hotel to verify ownership
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { hotelId: true },
-    })
-
-    if (!user?.hotelId) {
-      throw new Error('No hotel linked to user')
-    }
-
-    // 3) Verify task belongs to this hotel (security check)
+    // Verify task exists
     const task = await prisma.serviceTask.findUnique({
       where: { id: taskId },
-      select: { hotelId: true },
+      select: { id: true, hotelId: true, status: true, title: true },
     })
 
-    if (!task || task.hotelId !== user.hotelId) {
-      throw new Error('Task not found or access denied')
+    if (!task) {
+      throw new Error('Task not found')
     }
 
-    // 4) Update the task status
+    console.log('📋 Found task:', task.title)
+
+    // Update the task status
     const updatedTask = await prisma.serviceTask.update({
       where: { id: taskId },
       data: { 
@@ -48,11 +34,12 @@ export async function updateTaskStatus(
       },
     })
 
-    // 5) Revalidate dashboard to show changes immediately
-    revalidatePath('/owner/dashboard')
+    console.log(`✅ Task "${task.title}" updated to ${newStatus}`)
 
-    console.log(`✅ Task ${taskId} updated to ${newStatus}`)
-    
+    // Revalidate dashboard and tasks page to show changes immediately
+    revalidatePath('/owner/dashboard')
+    revalidatePath('/owner/tasks')
+
     return { success: true, task: updatedTask }
     
   } catch (error) {
