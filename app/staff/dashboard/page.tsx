@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, Clock, LogOut, RefreshCw } from 'lucide-react'
+import { CheckCircle2, Clock, LogOut, RefreshCw, MapPin } from 'lucide-react'
 
 interface StaffSession {
   id: string
@@ -24,6 +24,12 @@ interface ServiceTask {
   createdAt: string
 }
 
+interface TaskVisual {
+  icon: string
+  bgColor: string
+  label: string
+}
+
 export default function StaffDashboardPage() {
   const router = useRouter()
   const [session, setSession] = useState<StaffSession | null>(null)
@@ -32,7 +38,6 @@ export default function StaffDashboardPage() {
   const [completingTaskId, setCompletingTaskId] = useState<string | null>(null)
 
   useEffect(() => {
-    // Check if staff is logged in
     const sessionData = sessionStorage.getItem('staffSession')
     if (!sessionData) {
       router.push('/staff/login')
@@ -57,7 +62,6 @@ export default function StaffDashboardPage() {
 
       const allTasks = (await res.json()) as ServiceTask[]
       
-      // Filter tasks assigned to this staff member
       const myTasks = allTasks.filter(
         task => task.assignedTo === staffName && task.status !== 'complete'
       )
@@ -87,10 +91,7 @@ export default function StaffDashboardPage() {
         return
       }
 
-      // Show success feedback
       alert('✓ Task completed successfully!')
-
-      // Refresh task list
       void fetchTasks(session.name)
       setCompletingTaskId(null)
     } catch (error) {
@@ -105,32 +106,59 @@ export default function StaffDashboardPage() {
     router.push('/staff/login')
   }
 
-  function getTaskIcon(title: string): string {
+  function getTaskVisual(title: string, description: string | null): TaskVisual {
     const lowerTitle = title.toLowerCase()
+    const lowerDesc = (description || '').toLowerCase()
+    const combined = lowerTitle + ' ' + lowerDesc
     
-    if (lowerTitle.includes('minibar') || lowerTitle.includes('coke') || lowerTitle.includes('beverage')) {
-      return '🥤'
-    }
-    if (lowerTitle.includes('food') || lowerTitle.includes('biryani') || lowerTitle.includes('order')) {
-      return '🍽️'
-    }
-    if (lowerTitle.includes('towel')) {
-      return '🏩'
-    }
-    if (lowerTitle.includes('water')) {
-      return '💧'
-    }
-    if (lowerTitle.includes('laundry')) {
-      return '👔'
-    }
-    if (lowerTitle.includes('medicine')) {
-      return '💊'
-    }
-    if (lowerTitle.includes('clean') || lowerTitle.includes('housekeeping')) {
-      return '🧹'
+    // Minibar items
+    if (combined.includes('minibar') || combined.includes('coke') || combined.includes('sprite') || 
+        combined.includes('lays') || combined.includes('kurkure') || combined.includes('kitkat') ||
+        combined.includes('bisleri') || combined.includes('snack') || combined.includes('chip')) {
+      return { icon: '🥤', bgColor: 'bg-blue-50', label: 'Minibar Delivery' }
     }
     
-    return '🛎️'
+    // Food orders
+    if (combined.includes('food') || combined.includes('biryani') || combined.includes('chicken') ||
+        combined.includes('paneer') || combined.includes('dosa') || combined.includes('sandwich') ||
+        combined.includes('breakfast') || combined.includes('lunch') || combined.includes('dinner') ||
+        combined.includes('menu') || combined.includes('order')) {
+      return { icon: '🍽️', bgColor: 'bg-orange-50', label: 'Food Service' }
+    }
+    
+    // Towels
+    if (combined.includes('towel')) {
+      return { icon: '🛁', bgColor: 'bg-cyan-50', label: 'Towel Request' }
+    }
+    
+    // Water
+    if (combined.includes('water') || combined.includes('bottle')) {
+      return { icon: '💧', bgColor: 'bg-blue-50', label: 'Water Delivery' }
+    }
+    
+    // Laundry
+    if (combined.includes('laundry') || combined.includes('wash') || combined.includes('cloth')) {
+      return { icon: '👔', bgColor: 'bg-purple-50', label: 'Laundry Pickup' }
+    }
+    
+    // Medicine
+    if (combined.includes('medicine') || combined.includes('pharmacy') || combined.includes('tablet') ||
+        combined.includes('crocin') || combined.includes('medical')) {
+      return { icon: '💊', bgColor: 'bg-red-50', label: 'Medicine Delivery' }
+    }
+    
+    // Housekeeping
+    if (combined.includes('clean') || combined.includes('housekeeping') || combined.includes('tidy')) {
+      return { icon: '🧹', bgColor: 'bg-green-50', label: 'Housekeeping' }
+    }
+    
+    // Spa/Wellness
+    if (combined.includes('spa') || combined.includes('massage')) {
+      return { icon: '🧖‍♀️', bgColor: 'bg-pink-50', label: 'Spa Service' }
+    }
+    
+    // Default
+    return { icon: '🛎️', bgColor: 'bg-gray-50', label: 'Room Service' }
   }
 
   function formatTime(dateString: string) {
@@ -171,7 +199,7 @@ export default function StaffDashboardPage() {
               className="flex items-center gap-2"
             >
               <LogOut className="w-4 h-4" />
-              Logout
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
@@ -183,7 +211,7 @@ export default function StaffDashboardPage() {
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Your Tasks</h2>
             <p className="text-sm text-gray-600">
-              {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'} assigned to you
+              {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'} assigned
             </p>
           </div>
           <Button
@@ -194,7 +222,7 @@ export default function StaffDashboardPage() {
             className="flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            <span className="hidden sm:inline">Refresh</span>
           </Button>
         </div>
       </div>
@@ -204,7 +232,7 @@ export default function StaffDashboardPage() {
         {loading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading your tasks...</p>
+            <p className="text-gray-600">Loading tasks...</p>
           </div>
         ) : tasks.length === 0 ? (
           <Card className="text-center py-12">
@@ -219,69 +247,104 @@ export default function StaffDashboardPage() {
             </CardContent>
           </Card>
         ) : (
-          tasks.map((task) => (
-            <Card 
-              key={task.id} 
-              className="shadow-md hover:shadow-lg transition-shadow"
-            >
-              <CardContent className="p-6">
-                {/* Task Icon & Room */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="text-5xl">{getTaskIcon(task.title)}</div>
-                    <div>
-                      <div className="text-3xl font-bold text-gray-900">
-                        Room {task.roomNumber}
+          tasks.map((task) => {
+            const visual = getTaskVisual(task.title, task.description)
+            
+            return (
+              <Card 
+                key={task.id} 
+                className="shadow-lg hover:shadow-xl transition-shadow border-2"
+              >
+                <CardContent className="p-0">
+                  {/* Visual Header with Icon */}
+                  <div className={`${visual.bgColor} p-6 border-b-2`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        {/* Large Icon */}
+                        <div className="text-6xl">{visual.icon}</div>
+                        
+                        {/* Room Number */}
+                        <div>
+                          <div className="flex items-center gap-2 text-gray-600 text-sm mb-1">
+                            <MapPin className="w-4 h-4" />
+                            <span className="font-medium">Room Location</span>
+                          </div>
+                          <div className="text-4xl font-bold text-gray-900">
+                            {task.roomNumber}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Clock className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">
-                          {formatTime(task.createdAt)}
-                        </span>
-                      </div>
+                      
+                      {/* Priority Badge */}
+                      {task.priority === 'high' && (
+                        <Badge variant="destructive" className="text-sm px-3 py-1">
+                          URGENT
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    {/* Task Type Label */}
+                    <div className="mt-4">
+                      <Badge variant="secondary" className="text-sm px-3 py-1">
+                        {visual.label}
+                      </Badge>
                     </div>
                   </div>
-                  {task.priority === 'high' && (
-                    <Badge variant="destructive" className="text-xs">
-                      Urgent
-                    </Badge>
-                  )}
-                </div>
 
-                {/* Task Details */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {task.title}
-                  </h3>
-                  {task.description && (
-                    <p className="text-gray-700 text-base leading-relaxed">
-                      {task.description}
-                    </p>
-                  )}
-                </div>
+                  {/* Task Details */}
+                  <div className="p-6">
+                    {/* Title with icon */}
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-start gap-2">
+                      <span className="text-2xl">{visual.icon}</span>
+                      <span className="flex-1">{task.title}</span>
+                    </h3>
+                    
+                    {/* Description in clear format */}
+                    {task.description && (
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                        <p className="text-gray-800 text-base leading-relaxed font-medium">
+                          {task.description}
+                        </p>
+                      </div>
+                    )}
+                    
+                    {/* Time stamp */}
+                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>Requested {formatTime(task.createdAt)}</span>
+                    </div>
 
-                {/* Complete Button */}
-                <Button
-                  onClick={() => handleCompleteTask(task.id)}
-                  disabled={completingTaskId === task.id}
-                  className="w-full h-14 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold flex items-center justify-center gap-2"
-                >
-                  {completingTaskId === task.id ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                      <span>Completing...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-6 h-6" />
-                      <span>Mark as Complete</span>
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          ))
+                    {/* Large Complete Button */}
+                    <Button
+                      onClick={() => handleCompleteTask(task.id)}
+                      disabled={completingTaskId === task.id}
+                      className="w-full h-16 bg-green-600 hover:bg-green-700 text-white text-xl font-bold flex items-center justify-center gap-3 shadow-lg"
+                    >
+                      {completingTaskId === task.id ? (
+                        <>
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                          <span>Completing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="w-7 h-7" />
+                          <span>✓ Mark as Complete</span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })
         )}
+      </div>
+
+      {/* Language Note (Future Feature) */}
+      <div className="max-w-2xl mx-auto px-4 mt-8">
+        <div className="text-center text-xs text-gray-500 bg-white rounded-lg p-3 border">
+          🌐 Language support coming soon: Hindi, Marathi, Tamil & more
+        </div>
       </div>
     </main>
   )
