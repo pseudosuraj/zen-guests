@@ -12,7 +12,7 @@ datasource db {
 /**
  * Multi-tenancy:
  * - Hotel is the tenant.
- * - User, UpsellDeal, ServiceTask all belong to a Hotel via required hotelId.
+ * - User, UpsellDeal, ServiceTask, RevenueLedger all belong to a Hotel via required hotelId.
  * - Useful indexes on hotelId to scope queries efficiently.
  */
 
@@ -27,9 +27,10 @@ model Hotel {
   updatedAt  DateTime @updatedAt
 
   // Relations
-  users User[]
-  deals UpsellDeal[]
-  tasks ServiceTask[]
+  users   User[]
+  deals   UpsellDeal[]
+  tasks   ServiceTask[]
+  revenue RevenueLedger[]
 
   @@map("hotels")
 }
@@ -75,8 +76,8 @@ model User {
   emailVerified DateTime? @map("email_verified")
   image         String?
 
-  // Multi-tenant link (required)
-  hotelId String
+  // Multi-tenant link (optional during creation, assigned after)
+  hotelId String?
   hotel   Hotel?  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
 
   // Auth relations
@@ -86,6 +87,7 @@ model User {
   @@index([hotelId])
   @@map("users")
 }
+
 
 model VerificationToken {
   identifier String
@@ -135,4 +137,24 @@ model ServiceTask {
 
   @@index([hotelId])
   @@map("service_tasks")
+}
+
+/**
+ * ---------- Revenue Tracking ----------
+ */
+model RevenueLedger {
+  id         String   @id @default(cuid())
+  amount     Float
+  dealName   String
+  guestName  String?
+  roomNumber String?
+  createdAt  DateTime @default(now())
+
+  // Multi-tenant link (required)
+  hotelId String
+  hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  @@index([hotelId])
+  @@index([createdAt])
+  @@map("revenue_ledger")
 }
