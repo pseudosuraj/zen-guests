@@ -269,7 +269,7 @@ export default function StaffDashboardPage() {
                         <div>
                           <div className="flex items-center gap-2 text-gray-600 text-sm mb-1">
                             <MapPin className="w-4 h-4" />
-                            <span className="font-medium">Room Location</span>
+                            <span className="font-medium">Room Number</span>
                           </div>
                           <div className="text-4xl font-bold text-gray-900">
                             {task.roomNumber}
