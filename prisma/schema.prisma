@@ -27,13 +27,16 @@ model Hotel {
   updatedAt  DateTime @updatedAt
 
   // Relations
-  users   User[]
-  deals   UpsellDeal[]
-  tasks   ServiceTask[]
-  revenue RevenueLedger[]
+  users        User[]
+  deals        UpsellDeal[]
+  tasks        ServiceTask[]
+  revenue      RevenueLedger[]
+  menuItems    MenuItem[]      // <-- ADD THIS
+  minibarItems MinibarItem[]   // <-- ADD THIS
 
   @@map("hotels")
 }
+
 
 /**
  * ---------- Auth (NextAuth) ----------
@@ -157,4 +160,50 @@ model RevenueLedger {
   @@index([hotelId])
   @@index([createdAt])
   @@map("revenue_ledger")
+}
+
+/**
+ * ---------- Menu & Minibar ----------
+ */
+
+// Full menu items (for post-pilot)
+model MenuItem {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  category    String   // "Breakfast", "Main Course", "Beverages", etc.
+  imageUrl    String?
+  prepTime    String?  // "15 mins"
+  isVeg       Boolean  @default(true)
+  isAvailable Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  hotelId String
+  hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  
+  @@index([hotelId])
+  @@index([category])
+  @@map("menu_items")
+}
+
+// Minibar inventory (for pilot)
+model MinibarItem {
+  id                String   @id @default(cuid())
+  name              String
+  price             Decimal  @db.Decimal(10, 2)
+  category          String   // "Beverages", "Snacks", "Cigarettes"
+  stockQuantity     Int      @default(0)
+  lowStockThreshold Int      @default(5)  // Alert when below this
+  isAvailable       Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  hotelId String
+  hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  
+  @@index([hotelId])
+  @@map("minibar_items")
 }

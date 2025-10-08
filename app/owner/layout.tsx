@@ -55,6 +55,17 @@ const navItems: NavItem[] = [
     ),
   },
   {
+    label: "Minibar Manager",
+    href: "/owner/minibar",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M3 2v7c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V2" />
+        <path d="M7 11v11M12 11v11M17 11v11" />
+        <path d="M5 22h14" />
+      </svg>
+    ),
+  },
+  {
     label: "Reports",
     href: "/owner/reports",
     icon: (
@@ -78,6 +89,11 @@ const navItems: NavItem[] = [
 
 function Sidebar() {
   const pathname = usePathname();
+
+  // Force unique render
+  React.useEffect(() => {
+    console.log('Sidebar mounted with items:', navItems.length)
+  }, [])
 
   return (
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r bg-white p-4 lg:block">
@@ -113,7 +129,7 @@ function Sidebar() {
 
       <div className="absolute bottom-4 left-4 right-4">
         <div className="rounded-lg bg-gray-50 p-3 text-[11px] text-gray-500">
-          Owner Portal • App Shell Layout
+          Owner Portal • v2.0 (Minibar Added)
         </div>
       </div>
     </aside>
@@ -123,7 +139,7 @@ function Sidebar() {
 export default function OwnerLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-50 lg:flex">
-      <Sidebar />
+      <Sidebar key="sidebar-minibar-v2" />
       <div className="flex-1">
         <div className="lg:hidden border-b bg-white p-4">
           <div className="flex items-center gap-2">
