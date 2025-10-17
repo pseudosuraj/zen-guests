@@ -3,12 +3,18 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { hotelId: string } }
+  context: { params: Promise<{ hotelId: string }> }
 ) {
-  const hotelId = params.hotelId
+  const { hotelId } = await context.params;
+  
   const deals = await prisma.deal.findMany({
-    where: { hotelId },
+    where: { 
+      hotelId,
+      isRegular: true,
+      isActive: true,
+    },
     orderBy: { createdAt: "desc" }
-  })
-  return NextResponse.json(deals)
+  });
+  
+  return NextResponse.json(deals);
 }
