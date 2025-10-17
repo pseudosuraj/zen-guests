@@ -1,121 +1,106 @@
-// prisma/seed.ts
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Starting database seed...')
+  console.log('🌱 Starting seed...')
 
-  // 1. Create demo hotel
+  // Create demo hotel
   const hotel = await prisma.hotel.upsert({
     where: { id: 'demo-hotel-123' },
     update: {},
     create: {
       id: 'demo-hotel-123',
       name: 'The Grand Mumbai',
-      brandColor: '#6366F1', // Purple/indigo color
+      wifiName: 'GrandMumbai_Guest',
+      wifiPassword: 'Guest12345',
     },
   })
 
   console.log('✓ Created demo hotel:', hotel.name)
 
-  // 2. Create demo user (hotel owner)
-  const user = await prisma.user.upsert({
-    where: { email: 'owner@grandmumbai.com' },
-    update: {},
-    create: {
-      email: 'owner@grandmumbai.com',
-      name: 'Hotel Owner',
-      hotelId: hotel.id,
-    },
-  })
-
-  console.log('✓ Created demo user:', user.email)
-
-  // 3. Create upsell deals
-  await prisma.upsellDeal.deleteMany({ where: { hotelId: hotel.id } })
-  
-  const deals = await prisma.upsellDeal.createMany({
+  // Create UpsellDeals (for Enhance Your Stay tab)
+  await prisma.upsellDeal.createMany({
     data: [
       {
-        name: 'Premium Suite Upgrade',
-        price: 2499,
-        description: 'Upgrade to our Premium Suite with city view, complimentary minibar, and express checkout.',
-        imageUrl: '/images/room.jpg',
+        hotelId: 'demo-hotel-123',
+        name: 'Suite Upgrade',
+        price: 2500,
+        description: 'Upgrade to our luxurious suite with city view',
         type: 'ROOM_UPGRADE',
         active: true,
-        hotelId: hotel.id,
       },
       {
-        name: 'Gourmet Breakfast Buffet',
-        price: 899,
-        description: 'Start your day with our award-winning breakfast buffet featuring South Indian and Continental cuisine.',
-        imageUrl: '/images/breakfast.jpg',
-        type: 'FOOD_BEVERAGE',
-        active: true,
-        hotelId: hotel.id,
-      },
-      {
-        name: 'Local Biryani Delivery',
-        price: 450,
-        description: 'Authentic Hyderabadi biryani from the best local restaurants, delivered fresh by our concierge team.',
-        imageUrl: '/images/biryani.jpg',
-        type: 'FOOD_BEVERAGE',
-        active: true,
-        hotelId: hotel.id,
-      },
-      {
-        name: 'OTT Premium Package',
-        price: 499,
-        description: 'Netflix, Prime Video, Disney+ Hotstar access on your room TV plus complimentary popcorn.',
-        imageUrl: '/images/ott.jpg',
+        hotelId: 'demo-hotel-123',
+        name: 'Early Check-in',
+        price: 500,
+        description: 'Check in as early as 9 AM',
         type: 'EXPERIENCE',
         active: true,
-        hotelId: hotel.id,
+      },
+      {
+        hotelId: 'demo-hotel-123',
+        name: 'Late Check-out',
+        price: 800,
+        description: 'Enjoy late check-out until 6 PM',
+        type: 'EXPERIENCE',
+        active: true,
+      },
+      {
+        hotelId: 'demo-hotel-123',
+        name: 'Spa Package',
+        price: 3500,
+        description: 'Couples spa session with aromatherapy',
+        type: 'EXPERIENCE',
+        active: true,
       },
     ],
+    skipDuplicates: true,
   })
 
-  console.log(`✓ Created ${deals.count} upsell deals`)
+  console.log('✓ Created demo upsell deals')
 
-  // 4. Create service tasks
-  await prisma.serviceTask.deleteMany({ where: { hotelId: hotel.id } })
-  
-  const tasks = await prisma.serviceTask.createMany({
+  // Create some demo minibar items
+  await prisma.minibarItem.createMany({
     data: [
       {
-        title: 'Extra Towels Request',
-        description: 'Guest requested additional towels',
-        status: 'pending',
-        priority: 'high',
-        roomNumber: '204',
-        hotelId: hotel.id,
+        hotelId: 'demo-hotel-123',
+        name: 'Coca Cola',
+        price: 40,
+        category: 'Beverages',
+        stockQuantity: 50,
+        isAvailable: true,
       },
       {
-        title: 'Late Checkout Request',
-        description: 'Guest needs to checkout at 2 PM instead of 12 PM',
-        status: 'pending',
-        priority: 'medium',
-        roomNumber: '318',
-        hotelId: hotel.id,
+        hotelId: 'demo-hotel-123',
+        name: 'Diet Coke',
+        price: 40,
+        category: 'Beverages',
+        stockQuantity: 30,
+        isAvailable: true,
       },
       {
-        title: 'Room Service - Coffee & Snacks',
-        description: 'Complimentary welcome refreshments',
-        status: 'in-progress',
-        priority: 'high',
-        roomNumber: '102',
-        assignedTo: 'Housekeeping Staff',
-        hotelId: hotel.id,
+        hotelId: 'demo-hotel-123',
+        name: 'Chips',
+        price: 20,
+        category: 'Snacks',
+        stockQuantity: 50,
+        isAvailable: true,
+      },
+      {
+        hotelId: 'demo-hotel-123',
+        name: 'Cookies',
+        price: 30,
+        category: 'Snacks',
+        stockQuantity: 40,
+        isAvailable: true,
       },
     ],
+    skipDuplicates: true,
   })
 
-  console.log(`✓ Created ${tasks.count} service tasks`)
-
-  console.log('🎉 Seed completed successfully!')
-  console.log('\n📧 Demo login email: owner@grandmumbai.com')
-  console.log('🏨 Demo hotel ID: demo-hotel-123')
+  console.log('✓ Created demo minibar items')
+  console.log('🎉 Seed completed!')
 }
 
 main()

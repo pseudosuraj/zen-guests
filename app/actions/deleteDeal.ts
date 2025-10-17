@@ -1,12 +1,12 @@
-// app/actions/deleteDeal.ts
-'use server'
+"use server"
+import { revalidatePath } from "next/cache"
+import { prisma } from "@/lib/prisma"
 
-export async function deleteDeal(dealId: string): Promise<{ ok: boolean }> {
-  if (!dealId?.trim()) {
-    throw new Error('dealId is required')
-  }
+export async function deleteDeal(formData: FormData) {
+  const dealId = formData.get("dealId") as string
+  if (!dealId) throw new Error("Missing dealId")
 
-  // Temporary: no DB delete. Replace with Prisma when UpsellDeal model is restored.
-  console.warn('Deals deletion is temporarily stubbed; skipping DB delete for:', dealId)
-  return { ok: true }
+  await prisma.upsellDeal.delete({ where: { id: dealId } })
+  revalidatePath("/owner/deals")
+  return { success: true }
 }

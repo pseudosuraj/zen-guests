@@ -21,6 +21,13 @@ interface UpsellDeal {
   active: boolean
 }
 
+interface RegularDeal {
+  id: string
+  title: string
+  description: string | null
+  price: number
+}
+
 interface MinibarItem {
   id: string
   name: string
@@ -40,6 +47,7 @@ export default function GuestPortalPage({ params }: PageProps) {
   const { hotelId } = use(params)
 
   const [deals, setDeals] = useState<UpsellDeal[]>([])
+  const [regularDeals, setRegularDeals] = useState<RegularDeal[]>([])
   const [minibarItems, setMinibarItems] = useState<MinibarItem[]>([])
   const [loading, setLoading] = useState(true)
   const [hotelName, setHotelName] = useState('Loading...')
@@ -56,18 +64,39 @@ export default function GuestPortalPage({ params }: PageProps) {
 
   const GUEST_NAME = 'Priya Sharma'
   const ROOM_NUMBER = '204'
+  const [wifiInfo, setWifiInfo] = useState({ name: 'Loading...', password: '****' })
+
 
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true)
         
+        // Fetch UpsellDeals
         const dealsRes = await fetch(`/api/hotels/${hotelId}/deals`, { cache: 'no-store' })
         if (dealsRes.ok) {
           const dealsData = await dealsRes.json()
           setDeals(dealsData)
         }
 
+        // Fetch hotel info including WiFi
+        const hotelRes = await fetch(`/api/hotels/${hotelId}/info`, { cache: 'no-store' })
+        if (hotelRes.ok) {
+         const hotelData = await hotelRes.json()
+         setHotelName(hotelData.name || 'Your Hotel')
+         setWifiInfo({
+         name: hotelData.wifiName || 'Hotel WiFi',
+         password: hotelData.wifiPassword || 'Ask Front Desk'
+  })
+}
+        // Fetch regular Deals from Deal table
+        const regularDealsRes = await fetch(`/api/hotels/${hotelId}/regular-deals`, { cache: 'no-store' })
+        if (regularDealsRes.ok) {
+          const regularDealsData = await regularDealsRes.json()
+          setRegularDeals(regularDealsData)
+        }
+
+        // Fetch minibar items
         const minibarRes = await fetch(`/api/hotels/${hotelId}/minibar`, { cache: 'no-store' })
         if (minibarRes.ok) {
           const minibarData = await minibarRes.json()
@@ -117,6 +146,29 @@ export default function GuestPortalPage({ params }: PageProps) {
       alert(`Purchase failed: ${error instanceof Error ? error.message : 'Please try again.'}`)
     } finally {
       setPurchasingDealId(null)
+    }
+  }
+
+  const handleRegularDealPurchase = async (deal: RegularDeal) => {
+    try {
+      const res = await fetch("/api/guest/buy-deal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dealId: deal.id,
+          hotelId: hotelId,
+          roomNumber: ROOM_NUMBER,
+          guestName: GUEST_NAME,
+        }),
+      })
+      if (res.ok) {
+        alert(`✓ Request sent!\n\n${deal.title} - ₹${deal.price}\n\nOur staff will fulfill your request and message you in chat.`)
+      } else {
+        alert("Sorry, your request could not be sent.")
+      }
+    } catch (error) {
+      console.error(error)
+      alert("Error sending request. Please try again.")
     }
   }
 
@@ -243,13 +295,13 @@ export default function GuestPortalPage({ params }: PageProps) {
                   <path d="M8.5 16.5a5 5 0 0 1 7 0" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M12 20h.01" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span><strong>WiFi:</strong> GrandMumbai_Guest</span>
+                <span><strong>WiFi:</strong> {wifiInfo.name}</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2z" clipRule="evenodd" />
                 </svg>
-                <span><strong>Password:</strong> Guest12345</span>
+                <span><strong>Password:</strong> {wifiInfo.password}</span>
               </div>
             </div>
 
@@ -305,47 +357,87 @@ export default function GuestPortalPage({ params }: PageProps) {
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading exclusive offers...</p>
               </div>
-            ) : upsellDeals.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500">No offers available at the moment</p>
-              </div>
             ) : (
-              <div className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {upsellDeals.map((deal) => (
-                  <Card key={deal.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                    {deal.imageUrl && (
-                      <div className="relative h-40 md:h-48">
-                        <Image 
-                          src={deal.imageUrl} 
-                          alt={deal.name} 
-                          fill 
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" 
-                          className="object-cover" 
-                        />
-                        <div className="absolute inset-0 bg-black/20" />
-                      </div>
+              <>
+                {/* UpsellDeals (Room Upgrades, Experiences) */}
+                {upsellDeals.length > 0 && (
+                  <div className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {upsellDeals.map((deal) => (
+                      <Card key={deal.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                        {deal.imageUrl && (
+                          <div className="relative h-40 md:h-48">
+                            <Image 
+                              src={deal.imageUrl} 
+                              alt={deal.name} 
+                              fill 
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" 
+                              className="object-cover" 
+                            />
+                            <div className="absolute inset-0 bg-black/20" />
+                          </div>
+                        )}
+                        <CardHeader className="p-4">
+                          <CardTitle className="text-base md:text-lg">{deal.name}</CardTitle>
+                          <CardDescription className="text-sm">{deal.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="p-4 pt-0">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xl md:text-2xl font-bold text-green-600">
+                              ₹{Number(deal.price).toLocaleString()}
+                            </span>
+                            <Button 
+                              className="bg-purple-600 hover:bg-purple-700 text-sm"
+                              onClick={() => handlePurchase(deal)}
+                              disabled={purchasingDealId === deal.id}
+                            >
+                              {purchasingDealId === deal.id ? 'Processing...' : 'Purchase Now'}
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+
+                {/* Regular Deals (from Deal Manager) */}
+                {regularDeals.length > 0 && (
+                  <div className={upsellDeals.length > 0 ? "mt-8" : ""}>
+                    {upsellDeals.length > 0 && (
+                      <h3 className="text-xl font-bold text-gray-900 mb-4">Special Deals & Offers</h3>
                     )}
-                    <CardHeader className="p-4">
-                      <CardTitle className="text-base md:text-lg">{deal.name}</CardTitle>
-                      <CardDescription className="text-sm">{deal.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-4 pt-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xl md:text-2xl font-bold text-green-600">
-                          ₹{Number(deal.price).toLocaleString()}
-                        </span>
-                        <Button 
-                          className="bg-purple-600 hover:bg-purple-700 text-sm"
-                          onClick={() => handlePurchase(deal)}
-                          disabled={purchasingDealId === deal.id}
-                        >
-                          {purchasingDealId === deal.id ? 'Processing...' : 'Purchase Now'}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                    <div className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {regularDeals.map((deal) => (
+                        <Card key={deal.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                          <CardHeader className="p-4">
+                            <CardTitle className="text-base md:text-lg">{deal.title}</CardTitle>
+                            <CardDescription className="text-sm">{deal.description}</CardDescription>
+                          </CardHeader>
+                          <CardContent className="p-4 pt-0">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xl md:text-2xl font-bold text-green-600">
+                                ₹{Number(deal.price).toLocaleString()}
+                              </span>
+                              <Button 
+                                className="bg-purple-600 hover:bg-purple-700 text-sm"
+                                onClick={() => handleRegularDealPurchase(deal)}
+                              >
+                                Get This Deal
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Empty state */}
+                {upsellDeals.length === 0 && regularDeals.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-gray-500">No offers available at the moment</p>
+                  </div>
+                )}
+              </>
             )}
           </TabsContent>
 

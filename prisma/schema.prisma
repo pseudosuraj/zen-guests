@@ -10,33 +10,29 @@ datasource db {
 }
 
 /**
- * Multi-tenancy:
- * - Hotel is the tenant.
- * - User, UpsellDeal, ServiceTask, RevenueLedger all belong to a Hotel via required hotelId.
- * - Useful indexes on hotelId to scope queries efficiently.
- */
-
-/**
  * ---------- Tenant ----------
  */
 model Hotel {
-  id         String   @id @default(cuid())
-  name       String
-  brandColor String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  brandColor   String?
+  wifiName     String?  @default("Hotel_Guest_WiFi")
+  wifiPassword String?  @default("Guest12345")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   // Relations
-  users        User[]
-  deals        UpsellDeal[]
-  tasks        ServiceTask[]
-  revenue      RevenueLedger[]
-  menuItems    MenuItem[]      // <-- ADD THIS
-  minibarItems MinibarItem[]   // <-- ADD THIS
+  users           User[]
+  upsellDeals     UpsellDeal[]
+  tasks           ServiceTask[]
+  deals           Deal[]
+  revenue         RevenueLedger[]
+  menuItems       MenuItem[]
+  minibarItems    MinibarItem[]
+  dealRedemptions DealRedemption[]
 
   @@map("hotels")
 }
-
 
 /**
  * ---------- Auth (NextAuth) ----------
@@ -79,18 +75,15 @@ model User {
   emailVerified DateTime? @map("email_verified")
   image         String?
 
-  // Multi-tenant link (optional during creation, assigned after)
   hotelId String?
   hotel   Hotel?  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
 
-  // Auth relations
   accounts Account[]
   sessions Session[]
 
   @@index([hotelId])
   @@map("users")
 }
-
 
 model VerificationToken {
   identifier String
@@ -115,7 +108,6 @@ model UpsellDeal {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Multi-tenant link (required)
   hotelId String
   hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
 
@@ -134,7 +126,6 @@ model ServiceTask {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Multi-tenant link (required)
   hotelId String
   hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
 
@@ -142,9 +133,6 @@ model ServiceTask {
   @@map("service_tasks")
 }
 
-/**
- * ---------- Revenue Tracking ----------
- */
 model RevenueLedger {
   id         String   @id @default(cuid())
   amount     Float
@@ -153,7 +141,6 @@ model RevenueLedger {
   roomNumber String?
   createdAt  DateTime @default(now())
 
-  // Multi-tenant link (required)
   hotelId String
   hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
 
@@ -165,16 +152,14 @@ model RevenueLedger {
 /**
  * ---------- Menu & Minibar ----------
  */
-
-// Full menu items (for post-pilot)
 model MenuItem {
   id          String   @id @default(cuid())
   name        String
   description String?
   price       Decimal  @db.Decimal(10, 2)
-  category    String   // "Breakfast", "Main Course", "Beverages", etc.
+  category    String
   imageUrl    String?
-  prepTime    String?  // "15 mins"
+  prepTime    String?
   isVeg       Boolean  @default(true)
   isAvailable Boolean  @default(true)
   isFeatured  Boolean  @default(false)
@@ -189,14 +174,13 @@ model MenuItem {
   @@map("menu_items")
 }
 
-// Minibar inventory (for pilot)
 model MinibarItem {
   id                String   @id @default(cuid())
   name              String
   price             Decimal  @db.Decimal(10, 2)
-  category          String   // "Beverages", "Snacks", "Cigarettes"
+  category          String
   stockQuantity     Int      @default(0)
-  lowStockThreshold Int      @default(5)  // Alert when below this
+  lowStockThreshold Int      @default(5)
   isAvailable       Boolean  @default(true)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -206,4 +190,35 @@ model MinibarItem {
   
   @@index([hotelId])
   @@map("minibar_items")
+}
+
+/**
+ * ---------- Deals ----------
+ */
+model Deal {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  price       Float
+  hotelId     String
+  hotel       Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  redemptions DealRedemption[]
+
+  @@index([hotelId])
+}
+
+model DealRedemption {
+  id          String    @id @default(cuid())
+  dealId      String
+  deal        Deal      @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  hotelId     String
+  hotel       Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  roomNumber  String
+  guestName   String?
+  status      String    @default("pending")
+  createdAt   DateTime  @default(now())
+  fulfilledAt DateTime?
 }
