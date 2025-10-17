@@ -14,9 +14,9 @@ interface CheckInPageProps {
   }>
 }
 
-export default function CheckInPage({ params }: CheckInPageProps) {
+export default async function CheckInPage({ params }: CheckInPageProps) {
   // Unwrap the params Promise using React.use()
-  const { bookingId } = use(params)
+  const { bookingId } = await params;
   
   const [currentStep, setCurrentStep] = useState(1)
   const [guestData, setGuestData] = useState({

@@ -1,33 +1,55 @@
-import { prisma } from "@/lib/prisma";
-import DealsListClient from "./DealsListClient";
+import { notFound } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
+import DealsListClient from './DealsListClient';
 
-// Server component: fetch data, pass to client component for interactivity.
-type Props = {
-  params: {
-    hotelId: string;
-  }
+interface Props {
+  params: Promise<{ hotelId: string }>;
+  searchParams: Promise<{ roomNumber?: string; guestName?: string }>;
 }
 
-export default async function GuestDealsPage({ params }: Props) {
-  const hotelId = params.hotelId;
-  const deals = await prisma.deal.findMany({
-    where: { hotelId },
-    orderBy: { createdAt: "desc" }
+export default async function DealsPage({ params, searchParams }: Props) {
+  const { hotelId } = await params;
+  const { roomNumber = '', guestName = '' } = await searchParams;
+
+  // Verify hotel exists
+  const hotel = await prisma.hotel.findUnique({
+    where: { id: hotelId },
   });
 
-  const cleanDeals = deals.map(deal => ({
-    ...deal,
-    createdAt: deal.createdAt.toLocaleDateString("en-IN"),
+  if (!hotel) {
+    notFound();
+  }
+
+  // Fetch deals
+  const deals = await prisma.deal.findMany({
+    where: {
+      hotelId,
+      isActive: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  // Serialize dates to strings for client component
+  const serializedDeals = deals.map(deal => ({
+    id: deal.id,
+    title: deal.title,
+    description: deal.description,
+    price: deal.price,
+    createdAt: deal.createdAt.toISOString(),
+    updatedAt: deal.updatedAt.toISOString(),
+    imageUrl: deal.imageUrl,
+    category: deal.category,
+    isRegular: deal.isRegular,
+    isActive: deal.isActive,
   }));
 
-  // For now, just use sample values (replace with real data source)
-  const roomNumber = "101";
-  const guestName = "Guest Portal User";
-
   return (
-    <DealsListClient
-      deals={cleanDeals}
-      hotelId={hotelId}
+    <DealsListClient 
+      deals={serializedDeals} 
+      hotelId={hotelId} 
+      hotelName={hotel.name}
       roomNumber={roomNumber}
       guestName={guestName}
     />

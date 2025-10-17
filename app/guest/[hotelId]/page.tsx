@@ -43,8 +43,8 @@ interface PageProps {
   }>
 }
 
-export default function GuestPortalPage({ params }: PageProps) {
-  const { hotelId } = use(params)
+export default async function GuestPortalPage({ params }: PageProps) {
+  const { hotelId } = await params; 
 
   const [deals, setDeals] = useState<UpsellDeal[]>([])
   const [regularDeals, setRegularDeals] = useState<RegularDeal[]>([])
