@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  context: { params: { hotelId: string } }
+  context: { params: Promise<{ hotelId: string }> }
 ) {
   try {
-    const { hotelId } = context.params;
+    const { hotelId } = await context.params;
 
     const minibarItems = await prisma.minibarItem.findMany({
       where: {
@@ -29,10 +29,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  context: { params: { hotelId: string } }
+  context: { params: Promise<{ hotelId: string }> }
 ) {
   try {
-    const { hotelId } = context.params;
+    const { hotelId } = await context.params;
     const body = await request.json();
 
     const { name, price, category, stockQuantity, lowStockThreshold } = body;

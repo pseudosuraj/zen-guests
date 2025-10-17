@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  context: { params: { hotelId: string; itemId: string } }
+  context: { params: Promise<{ hotelId: string; itemId: string }> }
 ) {
   try {
-    const { hotelId, itemId } = context.params;
+    const { hotelId, itemId } = await context.params;
 
     const item = await prisma.minibarItem.findFirst({
       where: {
@@ -34,10 +34,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  context: { params: { hotelId: string; itemId: string } }
+  context: { params: Promise<{ hotelId: string; itemId: string }> }
 ) {
   try {
-    const { hotelId, itemId } = context.params;
+    const { itemId } = await context.params;
     const body = await request.json();
 
     const { name, price, category, stockQuantity, lowStockThreshold, isAvailable } = body;
@@ -68,10 +68,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { hotelId: string; itemId: string } }
+  context: { params: Promise<{ hotelId: string; itemId: string }> }
 ) {
   try {
-    const { hotelId, itemId } = context.params;
+    const { itemId } = await context.params;
 
     await prisma.minibarItem.delete({
       where: {

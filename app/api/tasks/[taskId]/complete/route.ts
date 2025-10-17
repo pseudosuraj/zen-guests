@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma';
 
 export async function PATCH(
   request: NextRequest,
-  context: { params: { taskId: string } }
+  context: { params: Promise<{ taskId: string }> }
 ) {
   try {
-    const { taskId } = context.params;
+    const { taskId } = await context.params;
 
     const task = await prisma.serviceTask.update({
       where: { id: taskId },
