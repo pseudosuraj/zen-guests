@@ -1,10 +1,8 @@
 // app/actions/createTask.ts
 'use server'
 
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
-
-const prisma = new PrismaClient()
 
 // Version 1: FormData version (for forms)
 export async function createTask(formData: FormData) {

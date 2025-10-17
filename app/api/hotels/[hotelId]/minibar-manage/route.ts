@@ -1,52 +1,60 @@
-// app/api/hotels/[hotelId]/minibar-manage/route.ts
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient()
-
-// GET - Fetch all minibar items (for management)
 export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ hotelId: string }> }
+  request: NextRequest,
+  context: { params: { hotelId: string } }
 ) {
   try {
-    const { hotelId } = await params
+    const { hotelId } = context.params;
 
-    const items = await prisma.minibarItem.findMany({
-      where: { hotelId },
-      orderBy: { category: 'asc' },
-    })
+    const minibarItems = await prisma.minibarItem.findMany({
+      where: {
+        hotelId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
-    return NextResponse.json(items)
+    return NextResponse.json(minibarItems);
   } catch (error) {
-    console.error('❌ Fetch minibar error:', error)
-    return NextResponse.json({ error: 'Failed to fetch items' }, { status: 500 })
+    console.error('Error fetching minibar items:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch minibar items' },
+      { status: 500 }
+    );
   }
 }
 
-// POST - Create new minibar item
 export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ hotelId: string }> }
+  request: NextRequest,
+  context: { params: { hotelId: string } }
 ) {
   try {
-    const { hotelId } = await params
-    const body = await request.json()
+    const { hotelId } = context.params;
+    const body = await request.json();
 
-    const item = await prisma.minibarItem.create({
+    const { name, price, category, stockQuantity, lowStockThreshold } = body;
+
+    const minibarItem = await prisma.minibarItem.create({
       data: {
-        name: body.name,
-        price: body.price,
-        category: body.category,
-        stockQuantity: body.stockQuantity,
-        lowStockThreshold: body.lowStockThreshold,
+        name,
+        price: parseFloat(price),
+        category,
+        stockQuantity: parseInt(stockQuantity) || 0,
+        lowStockThreshold: parseInt(lowStockThreshold) || 5,
+        isAvailable: true,
         hotelId,
       },
-    })
+    });
 
-    return NextResponse.json(item)
+    return NextResponse.json(minibarItem, { status: 201 });
   } catch (error) {
-    console.error('❌ Create minibar item error:', error)
-    return NextResponse.json({ error: 'Failed to create item' }, { status: 500 })
+    console.error('Error creating minibar item:', error);
+    return NextResponse.json(
+      { error: 'Failed to create minibar item' },
+      { status: 500 }
+    );
   }
 }

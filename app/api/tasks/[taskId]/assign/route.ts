@@ -1,60 +1,37 @@
-// app/api/tasks/[taskId]/assign/route.ts
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ taskId: string }> }
+  request: NextRequest,
+  context: { params: { taskId: string } }
 ) {
   try {
-    const { taskId } = await params
-    const body = await request.json()
-    const { staffName } = body
+    const { taskId } = context.params;
+    const body = await request.json();
+    const { assignedTo } = body;
 
-    console.log('📥 PATCH /api/tasks/[taskId]/assign called')
-    console.log('Task ID:', taskId)
-    console.log('Staff Name:', staffName)
-
-    // Verify task exists
-    const task = await prisma.serviceTask.findUnique({
-      where: { id: taskId },
-      select: { hotelId: true, status: true },
-    })
-
-    if (!task) {
-      return NextResponse.json(
-        { error: 'Task not found' },
-        { status: 404 }
-      )
-    }
-
-    // Prevent assignment changes to completed tasks
-    if (task.status === 'complete') {
-      return NextResponse.json(
-        { error: 'Cannot modify completed tasks' },
-        { status: 400 }
-      )
-    }
-
-    // Update assignment
-    const updatedTask = await prisma.serviceTask.update({
+    const task = await prisma.serviceTask.update({
       where: { id: taskId },
       data: {
-        assignedTo: staffName || null,
+        assignedTo: assignedTo || null,
         updatedAt: new Date(),
       },
-    })
+      include: {
+        hotel: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
 
-    console.log('✅ Task assigned successfully')
-
-    return NextResponse.json(updatedTask)
+    return NextResponse.json(task);
   } catch (error) {
-    console.error('❌ Task assignment error:', error)
+    console.error('Error assigning task:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to assign task' },
       { status: 500 }
-    )
+    );
   }
 }

@@ -1,38 +1,62 @@
-// app/api/hotels/[hotelId]/deals/route.ts
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ hotelId: string }> }
+  request: NextRequest,
+  context: { params: { hotelId: string } }
 ) {
   try {
-    const { hotelId } = await params
+    const { hotelId } = context.params;
 
-    console.log('📥 GET /api/hotels/[hotelId]/deals called')
-    console.log('Hotel ID:', hotelId)
-
-    // Fetch active deals for this hotel
-    const deals = await prisma.upsellDeal.findMany({
+    const deals = await prisma.deal.findMany({
       where: {
-        hotelId: hotelId,
-        active: true,
+        hotelId,
+        isActive: true,
       },
       orderBy: {
         createdAt: 'desc',
       },
-    })
+    });
 
-    console.log(`✅ Found ${deals.length} deals for hotel ${hotelId}`)
-
-    return NextResponse.json(deals)
+    return NextResponse.json(deals);
   } catch (error) {
-    console.error('❌ Fetch deals error:', error)
+    console.error('Error fetching deals:', error);
     return NextResponse.json(
       { error: 'Failed to fetch deals' },
       { status: 500 }
-    )
+    );
+  }
+}
+
+export async function POST(
+  request: NextRequest,
+  context: { params: { hotelId: string } }
+) {
+  try {
+    const { hotelId } = context.params;
+    const body = await request.json();
+
+    const { title, description, price, category, imageUrl, isRegular } = body;
+
+    const deal = await prisma.deal.create({
+      data: {
+        title,
+        description,
+        price: parseFloat(price),
+        category,
+        imageUrl,
+        isRegular: isRegular || false,
+        isActive: true,
+        hotelId,
+      },
+    });
+
+    return NextResponse.json(deal, { status: 201 });
+  } catch (error) {
+    console.error('Error creating deal:', error);
+    return NextResponse.json(
+      { error: 'Failed to create deal' },
+      { status: 500 }
+    );
   }
 }

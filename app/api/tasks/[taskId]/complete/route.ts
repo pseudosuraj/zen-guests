@@ -1,35 +1,35 @@
-// app/api/tasks/[taskId]/complete/route.ts
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient()
-
-export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ taskId: string }> }
+export async function PATCH(
+  request: NextRequest,
+  context: { params: { taskId: string } }
 ) {
   try {
-    const { taskId } = await params
+    const { taskId } = context.params;
 
-    console.log('✅ Marking task as complete:', taskId)
-
-    // Update task status to complete
     const task = await prisma.serviceTask.update({
       where: { id: taskId },
       data: {
         status: 'complete',
         updatedAt: new Date(),
       },
-    })
+      include: {
+        hotel: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
 
-    console.log('✓ Task completed:', task.title)
-
-    return NextResponse.json({ success: true, task })
+    return NextResponse.json(task);
   } catch (error) {
-    console.error('❌ Error completing task:', error)
+    console.error('Error completing task:', error);
     return NextResponse.json(
       { error: 'Failed to complete task' },
       { status: 500 }
-    )
+    );
   }
 }

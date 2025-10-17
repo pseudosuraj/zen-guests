@@ -1,52 +1,90 @@
-// app/api/hotels/[hotelId]/minibar-manage/[itemId]/route.ts
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient()
-
-// PUT - Update minibar item
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ hotelId: string; itemId: string }> }
+export async function GET(
+  request: NextRequest,
+  context: { params: { hotelId: string; itemId: string } }
 ) {
   try {
-    const { itemId } = await params
-    const body = await request.json()
+    const { hotelId, itemId } = context.params;
 
-    const item = await prisma.minibarItem.update({
-      where: { id: itemId },
-      data: {
-        name: body.name,
-        price: body.price,
-        category: body.category,
-        stockQuantity: body.stockQuantity,
-        lowStockThreshold: body.lowStockThreshold,
-        isAvailable: body.isAvailable,
+    const item = await prisma.minibarItem.findFirst({
+      where: {
+        id: itemId,
+        hotelId,
       },
-    })
+    });
 
-    return NextResponse.json(item)
+    if (!item) {
+      return NextResponse.json(
+        { error: 'Item not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(item);
   } catch (error) {
-    console.error('❌ Update minibar item error:', error)
-    return NextResponse.json({ error: 'Failed to update item' }, { status: 500 })
+    console.error('Error fetching minibar item:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch minibar item' },
+      { status: 500 }
+    );
   }
 }
 
-// DELETE - Delete minibar item
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ itemId: string }> }
+export async function PATCH(
+  request: NextRequest,
+  context: { params: { hotelId: string; itemId: string } }
 ) {
   try {
-    const { itemId } = await params
+    const { hotelId, itemId } = context.params;
+    const body = await request.json();
+
+    const { name, price, category, stockQuantity, lowStockThreshold, isAvailable } = body;
+
+    const updatedItem = await prisma.minibarItem.update({
+      where: {
+        id: itemId,
+      },
+      data: {
+        ...(name && { name }),
+        ...(price && { price: parseFloat(price) }),
+        ...(category && { category }),
+        ...(stockQuantity !== undefined && { stockQuantity: parseInt(stockQuantity) }),
+        ...(lowStockThreshold !== undefined && { lowStockThreshold: parseInt(lowStockThreshold) }),
+        ...(isAvailable !== undefined && { isAvailable }),
+      },
+    });
+
+    return NextResponse.json(updatedItem);
+  } catch (error) {
+    console.error('Error updating minibar item:', error);
+    return NextResponse.json(
+      { error: 'Failed to update minibar item' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: { hotelId: string; itemId: string } }
+) {
+  try {
+    const { hotelId, itemId } = context.params;
 
     await prisma.minibarItem.delete({
-      where: { id: itemId },
-    })
+      where: {
+        id: itemId,
+      },
+    });
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('❌ Delete minibar item error:', error)
-    return NextResponse.json({ error: 'Failed to delete item' }, { status: 500 })
+    console.error('Error deleting minibar item:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete minibar item' },
+      { status: 500 }
+    );
   }
 }

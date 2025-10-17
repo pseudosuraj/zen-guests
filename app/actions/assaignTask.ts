@@ -1,12 +1,10 @@
 // app/actions/assignTask.ts
 'use server'
 
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-
-const prisma = new PrismaClient()
 
 export async function assignTask(taskId: string, staffName: string | null) {
   try {
@@ -48,6 +46,7 @@ export async function assignTask(taskId: string, staffName: string | null) {
     // 5) Revalidate pages
     revalidatePath('/owner/dashboard')
     revalidatePath('/owner/tasks')
+    revalidatePath('/staff/dashboard')
 
     console.log(`✅ Task ${taskId} assigned to ${staffName || 'unassigned'}`)
 

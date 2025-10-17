@@ -200,6 +200,10 @@ model Deal {
   title       String
   description String?
   price       Float
+  isRegular   Boolean  @default(false)  // ← ENSURE THIS LINE EXISTS
+  isActive    Boolean  @default(true)   // ← ADD THIS TOO
+  category    String?                   // ← OPTIONAL BUT RECOMMENDED
+  imageUrl    String?                   // ← OPTIONAL BUT RECOMMENDED
   hotelId     String
   hotel       Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
@@ -209,6 +213,7 @@ model Deal {
 
   @@index([hotelId])
 }
+
 
 model DealRedemption {
   id          String    @id @default(cuid())

@@ -1,10 +1,8 @@
 // app/actions/updateTaskStatus.ts
 'use server'
 
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
-
-const prisma = new PrismaClient()
 
 export async function updateTaskStatus(
   taskId: string,
@@ -39,6 +37,7 @@ export async function updateTaskStatus(
     // Revalidate dashboard and tasks page to show changes immediately
     revalidatePath('/owner/dashboard')
     revalidatePath('/owner/tasks')
+    revalidatePath('/staff/dashboard')
 
     return { success: true, task: updatedTask }
     

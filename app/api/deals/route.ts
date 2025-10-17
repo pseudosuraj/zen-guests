@@ -1,27 +1,34 @@
-// app/api/deals/route.ts
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
-
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const dealsRaw = await prisma.upsellDeal.findMany({
-      orderBy: { createdAt: 'desc' },
+    const { searchParams } = new URL(request.url);
+    const hotelId = searchParams.get('hotelId');
+
+    if (!hotelId) {
+      return NextResponse.json(
+        { error: 'Hotel ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const deals = await prisma.deal.findMany({
+      where: {
+        hotelId,
+        isActive: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
-    // Convert Decimal to number for JSON serialization
-    const deals = dealsRaw.map(deal => ({
-      ...deal,
-      price: deal.price.toNumber(),
-      createdAt: deal.createdAt.toISOString(),
-      updatedAt: deal.updatedAt.toISOString(),
-    }));
-
-    return NextResponse.json(deals, { status: 200 });
+    return NextResponse.json(deals);
   } catch (error) {
-    console.error('GET /api/deals error:', error);
-    return NextResponse.json({ error: 'Failed to fetch deals' }, { status: 500 });
+    console.error('Error fetching deals:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch deals' },
+      { status: 500 }
+    );
   }
 }

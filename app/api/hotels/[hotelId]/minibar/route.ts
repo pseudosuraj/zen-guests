@@ -1,37 +1,29 @@
-// app/api/hotels/[hotelId]/minibar/route.ts
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ hotelId: string }> }
+  request: NextRequest,
+  context: { params: { hotelId: string } }
 ) {
   try {
-    const { hotelId } = await params
+    const { hotelId } = context.params;
 
-    console.log('📥 GET /api/hotels/[hotelId]/minibar called')
-    console.log('Hotel ID:', hotelId)
-
-    const items = await prisma.minibarItem.findMany({
+    const minibarItems = await prisma.minibarItem.findMany({
       where: {
-        hotelId: hotelId,
+        hotelId,
         isAvailable: true,
       },
       orderBy: {
         category: 'asc',
       },
-    })
+    });
 
-    console.log(`✅ Found ${items.length} minibar items`)
-
-    return NextResponse.json(items)
+    return NextResponse.json(minibarItems);
   } catch (error) {
-    console.error('❌ Fetch minibar error:', error)
+    console.error('Error fetching minibar items:', error);
     return NextResponse.json(
       { error: 'Failed to fetch minibar items' },
       { status: 500 }
-    )
+    );
   }
 }

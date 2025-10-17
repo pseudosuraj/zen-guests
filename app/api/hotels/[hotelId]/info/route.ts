@@ -1,28 +1,69 @@
-import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { hotelId: string } }
+  request: NextRequest,
+  context: { params: { hotelId: string } }
 ) {
   try {
+    const { hotelId } = context.params;
+
     const hotel = await prisma.hotel.findUnique({
-      where: { id: params.hotelId },
+      where: { id: hotelId },
       select: {
         id: true,
         name: true,
+        brandColor: true,
         wifiName: true,
-        wifiPassword: true
-      }
-    })
-    
+        wifiPassword: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
     if (!hotel) {
-      return NextResponse.json({ error: "Hotel not found" }, { status: 404 })
+      return NextResponse.json(
+        { error: 'Hotel not found' },
+        { status: 404 }
+      );
     }
-    
-    return NextResponse.json(hotel)
+
+    return NextResponse.json(hotel);
   } catch (error) {
-    console.error("Error fetching hotel info:", error)
-    return NextResponse.json({ error: "Failed to fetch hotel info" }, { status: 500 })
+    console.error('Error fetching hotel info:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch hotel information' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: { hotelId: string } }
+) {
+  try {
+    const { hotelId } = context.params;
+    const body = await request.json();
+
+    const { name, brandColor, wifiName, wifiPassword } = body;
+
+    const updatedHotel = await prisma.hotel.update({
+      where: { id: hotelId },
+      data: {
+        ...(name && { name }),
+        ...(brandColor && { brandColor }),
+        ...(wifiName && { wifiName }),
+        ...(wifiPassword && { wifiPassword }),
+      },
+    });
+
+    return NextResponse.json(updatedHotel);
+  } catch (error) {
+    console.error('Error updating hotel info:', error);
+    return NextResponse.json(
+      { error: 'Failed to update hotel information' },
+      { status: 500 }
+    );
   }
 }
