@@ -1,17 +1,42 @@
-"use server"
-import { revalidatePath } from "next/cache"
-import { prisma } from "@/lib/prisma"
+// app/actions/createDeal.ts
+'use server'
+
+import { prisma } from '@/lib/prisma'
+import { revalidatePath } from 'next/cache'
 
 export async function createDeal(formData: FormData) {
-  const name = formData.get("name") as string
-  const description = formData.get("description") as string
-  const price = Number(formData.get("price"))
-  const imageUrl = formData.get("imageUrl") as string
-  const type = formData.get("type") as string
+  try {
+    const name = String(formData.get('name') ?? '')
+    const description = String(formData.get('description') ?? '')
+    const price = parseFloat(String(formData.get('price') ?? '0'))
+    const type = String(formData.get('type') ?? '')
+    const imageUrl = String(formData.get('imageUrl') ?? '')
+    const hotelId = String(formData.get('hotelId') ?? '')
 
-  await prisma.upsellDeal.create({
-    data: { name, description, price, type, imageUrl }
-  })
-  revalidatePath("/owner/deals")
-  return { success: true }
+    if (!name.trim()) {
+      throw new Error('Deal name is required')
+    }
+
+    if (!hotelId) {
+      throw new Error('Hotel ID is required')
+    }
+
+    await prisma.upsellDeal.create({
+      data: { 
+        name, 
+        description, 
+        price, 
+        type, 
+        imageUrl,
+        hotelId,  // Add the missing hotelId
+        active: true,
+      }
+    })
+
+    revalidatePath("/owner/deals")
+    return { success: true }
+  } catch (error) {
+    console.error('❌ Create deal error:', error)
+    throw error
+  }
 }
