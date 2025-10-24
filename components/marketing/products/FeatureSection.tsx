@@ -1,70 +1,62 @@
-"use client";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+'use client'
+import Image from "next/image"
+import { ReactNode } from "react"
 
-type FeatureSectionProps = {
-  imageSrc: string;
-  title: string;
-  description: string;
-  features: string[];
-  reversed?: boolean;
-};
+interface FeatureSectionProps {
+  reverse?: boolean
+  title: string
+  subtitle: string
+  img: string
+  featureList: ReactNode
+  outcomeIcon: ReactNode
+  outcomeText: string
+}
 
 export default function FeatureSection({
-  imageSrc,
+  reverse = false,
   title,
-  description,
-  features,
-  reversed = false
+  subtitle,
+  img,
+  featureList,
+  outcomeIcon,
+  outcomeText,
 }: FeatureSectionProps) {
   return (
-    <section className="py-20 px-4 bg-white">
-      <div className={
-        `max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center` +
-        (reversed ? " md:flex-row-reverse" : "")
-      }>
-        <motion.div
-          initial={{ x: reversed ? 80 : -80, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ type: "spring", duration: 1 }}
-          viewport={{ once: true }}
-          className="w-full flex justify-center"
-        >
-          <div className="relative rounded-2xl overflow-hidden shadow-xl border bg-gradient-to-br from-purple-50 via-blue-100 to-white">
-            <Image
-              src={imageSrc}
-              alt={title}
-              width={500}
-              height={340}
-              className="object-cover w-[340px] md:w-[500px] h-[240px] md:h-[340px]"
-              priority
-            />
+    <section className="py-16">
+      <div className={`max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-16 px-6 ${reverse ? "md:flex-row-reverse" : ""}`}>
+        {/* Text */}
+        <div className="flex-1">
+          <h2 className="font-display text-3xl md:text-4xl font-bold mb-3 text-primary">{title}</h2>
+          <p className="text-lg text-primary/80 mb-5">{subtitle}</p>
+          <div className="mb-5">{featureList}</div>
+          {/* Outcome block */}
+          <div className="mt-6 flex items-center gap-3 bg-green-50 border border-green-200 rounded-lg px-5 py-3 shadow-sm w-fit">
+            <span className="text-accent-green">{outcomeIcon}</span>
+            <span className="font-semibold text-primary">{outcomeText}</span>
           </div>
-        </motion.div>
-        <motion.div
-          initial={{ x: reversed ? -80 : 80, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ type: "spring", duration: 1, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="w-full flex flex-col justify-center"
-        >
-          <div className="mb-5 font-bold text-2xl md:text-3xl text-gray-900">
-            {title}
+        </div>
+        {/* Image in device mockup */}
+        <div className="flex-1 flex justify-center">
+          <div className="rounded-2xl shadow-xl border border-gray-200 bg-gray-100 overflow-hidden" style={{ width: 370, minHeight: 510 }}>
+            {/* Simple browser/device header */}
+            <div className="flex items-center gap-2 h-10 px-4 border-b border-gray-200 bg-white">
+              <span className="h-3 w-3 rounded-full bg-gray-300 inline-block" />
+              <span className="h-3 w-3 rounded-full bg-gray-300 inline-block" />
+              <span className="h-3 w-3 rounded-full bg-gray-300 inline-block" />
+            </div>
+            <div style={{ minHeight: 400, background: "#f5f5f5" }}>
+              <Image
+                src={img}
+                alt={title}
+                className="w-full h-auto object-cover"
+                width={370}
+                height={400}
+                priority
+              />
+            </div>
           </div>
-          <div className="mb-6 text-base md:text-lg text-gray-600">
-            {description}
-          </div>
-          <ul className="space-y-5 mt-4">
-            {features.map(feature => (
-              <li key={feature} className="flex items-center gap-3 text-lg text-gray-800">
-                <CheckCircle2 className="w-6 h-6 text-purple-600" />
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </motion.div>
+        </div>
       </div>
     </section>
-  );
+  )
 }
