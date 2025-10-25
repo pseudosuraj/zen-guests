@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image'
+import { PhoneCall, IndianRupee, StarOff } from 'lucide-react'
 
 export default function ProblemSolutionSection() {
   return (
@@ -10,33 +10,10 @@ export default function ProblemSolutionSection() {
         </h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 
-          {/* Card 1: High OTA Commissions */}
+          {/* Card 1: Front Desk Chaos */}
           <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="mb-4">
-              <Image
-                src="/images/problem-chaos.png"
-                alt="High OTA Commissions"
-                width={80}
-                height={80}
-                className="object-contain"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-primary mb-2">High OTA Commissions</h3>
-            <p className="text-gray-700">
-              High dependency on OTAs eats into your profits, while direct booking tools are often too complex or expensive.
-            </p>
-          </div>
-
-          {/* Card 2: Operational Chaos */}
-          <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="mb-4">
-              <Image
-                src="/images/problem-leakage.png"
-                alt="Front Desk Chaos"
-                width={80}
-                height={80}
-                className="object-contain"
-              />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
+              <PhoneCall className="w-7 h-7 text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">Front Desk Chaos</h3>
             <p className="text-gray-700">
@@ -44,20 +21,25 @@ export default function ProblemSolutionSection() {
             </p>
           </div>
 
-          {/* Card 3: Revenue Leakage */}
+          {/* Card 2: Revenue Leakage */}
           <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="mb-4">
-              <Image
-                src="/images/problem-review.png"
-                alt="Revenue Leakage"
-                width={80}
-                height={80}
-                className="object-contain"
-              />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
+              <IndianRupee className="w-7 h-7 text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">Revenue Leakage</h3>
             <p className="text-gray-700">
               Every guest order on an external app is a high-margin opportunity lost. This hidden leakage costs you lakhs every year.
+            </p>
+          </div>
+
+          {/* Card 3: Negative Online Review */}
+          <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
+              <StarOff className="w-7 h-7 text-green-600" />
+            </div>
+            <h3 className="text-xl font-bold text-primary mb-2">Negative Online Review</h3>
+            <p className="text-gray-700">
+              A single bad review from a poorly handled request can damage your reputation and impact future bookings. Manual systems create inconsistent experiences.
             </p>
           </div>
         </div>

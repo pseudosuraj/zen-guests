@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image'
+import { TrendingUp, ClipboardCheck, Smile } from 'lucide-react'
 
 export default function FeatureHighlightsSection() {
   return (
@@ -12,14 +12,8 @@ export default function FeatureHighlightsSection() {
           
           {/* Card 1: Revenue Engine */}
           <div className="bg-gray-50 rounded-xl shadow-lg p-8 flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="mb-4">
-              <Image
-                src="/images/feature-revenue.png"
-                alt="Revenue Engine"
-                width={80}
-                height={80}
-                className="object-contain"
-              />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
+              <TrendingUp className="w-7 h-7 text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">The Revenue Engine</h3>
             <p className="text-gray-700 text-center">
@@ -29,14 +23,8 @@ export default function FeatureHighlightsSection() {
 
           {/* Card 2: Peak Productivity */}
           <div className="bg-gray-50 rounded-xl shadow-lg p-8 flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="mb-4">
-              <Image
-                src="/images/feature-ops.png"
-                alt="Peak Productivity"
-                width={80}
-                height={80}
-                className="object-contain"
-              />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
+              <ClipboardCheck className="w-7 h-7 text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">Peak Productivity</h3>
             <p className="text-gray-700 text-center">
@@ -46,14 +34,8 @@ export default function FeatureHighlightsSection() {
 
           {/* Card 3: Delight, On Demand */}
           <div className="bg-gray-50 rounded-xl shadow-lg p-8 flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="mb-4">
-              <Image
-                src="/images/feature-delight.png"
-                alt="Delight On Demand"
-                width={80}
-                height={80}
-                className="object-contain"
-              />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
+              <Smile className="w-7 h-7 text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">Delight, On Demand</h3>
             <p className="text-gray-700 text-center">
