@@ -1,26 +1,34 @@
-"use client";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+'use client'
+
+import Link from "next/link"
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between px-6 py-4 shadow-sm bg-white">
-      <div className="flex items-center gap-3">
-        {/* Replace with your real logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo-zenguests.png" alt="Zen-Guests Logo" width={40} height={40} />
-          <span className="text-xl font-extrabold tracking-wide text-purple-700">Zen-Guests</span>
+    <nav className="w-full bg-card-bg/95 backdrop-blur-sm border-b border-border-soft shadow-sm fixed top-0 left-0 z-30">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-20">
+        <Link href="/" className="font-display text-2xl font-bold text-primary-dark">
+          Zen-Guests
         </Link>
-      </div>
-      <div className="flex items-center gap-6">
-        <Link href="/products" className="text-gray-700 text-md font-medium hover:text-purple-700 transition">Products</Link>
-        <Link href="/pricing" className="text-gray-700 text-md font-medium hover:text-purple-700 transition">Pricing</Link>
-        <Link href="/about-us" className="text-gray-700 text-md font-medium hover:text-purple-700 transition">About Us</Link>
-        <Button asChild className="ml-3 px-6 py-2 font-semibold bg-purple-700 hover:bg-purple-800 text-base">
-          <Link href="/book-a-demo">Book a Demo</Link>
-        </Button>
+        <div className="flex items-center gap-6">
+          <Link href="/about-us" className="text-primary-dark hover:text-accent-blue transition text-base font-medium">
+            About
+          </Link>
+          <Link href="/products" className="text-primary-dark hover:text-accent-blue transition text-base font-medium">
+            Products
+          </Link>
+          <Link href="/pricing" className="text-primary-dark hover:text-accent-blue transition text-base font-medium">
+            Pricing
+          </Link>
+          <Link href="/book-a-demo">
+            <span
+              className="ml-2 px-5 py-3 rounded-lg bg-accent-blue text-white font-bold 
+                         hover:bg-accent-blue/90 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Book a Demo
+            </span>
+          </Link>
+        </div>
       </div>
     </nav>
-  );
+  )
 }

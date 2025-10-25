@@ -27,7 +27,7 @@ export default function HowItWorksSection() {
   return (
     <div className="w-full py-24 relative px-6 bg-background">
       <section className="relative max-w-6xl mx-auto">
-        <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-20 text-primary-blue">
+        <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-20 text-primary-dark">
           Launch Your New Revenue Engine in 3 Simple Steps
         </h2>
 
@@ -63,14 +63,14 @@ export default function HowItWorksSection() {
                 <div className="flex-1 flex flex-col justify-center text-center md:text-left">
                   <div className="flex items-center gap-3 mb-4 justify-center md:justify-start">
                     <span className="inline-flex items-center justify-center px-4 py-2 rounded-full 
-                                     bg-accent-gold/10 border border-accent-gold text-accent-gold text-sm font-bold">
+                                     bg-accent-blue/10 border border-accent-blue text-accent-blue text-sm font-bold">
                       {step.step}
                     </span>
-                    <span className="font-bold text-2xl text-primary-blue">
+                    <span className="font-bold text-2xl text-primary-dark">
                       {step.title}
                     </span>
                   </div>
-                  <p className="text-primary-blue/70 text-lg leading-relaxed">
+                  <p className="text-primary-dark/70 text-lg leading-relaxed">
                     {step.desc}
                   </p>
                 </div>

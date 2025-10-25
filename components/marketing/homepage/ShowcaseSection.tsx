@@ -30,7 +30,7 @@ export default function ShowcaseSection() {
         {/* Part 1: The Problem */}
         <div className="grid md:grid-cols-2 gap-16 items-center mb-32">
           <div>
-            <h2 className="font-display text-5xl md:text-6xl font-bold text-primary-blue mb-8 leading-tight">
+            <h2 className="font-display text-5xl md:text-6xl font-bold text-primary-dark mb-8 leading-tight">
               Your Profit is Lost<br />in the Noise.
             </h2>
           </div>
@@ -43,10 +43,10 @@ export default function ShowcaseSection() {
                 transition={{ duration: 0.6, delay: idx * 0.15 }}
                 className="bg-card-bg border border-border-soft rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <h3 className="font-bold text-xl text-primary-blue mb-2">
+                <h3 className="font-bold text-xl text-primary-dark mb-2">
                   {problem.title}
                 </h3>
-                <p className="text-primary-blue/70">
+                <p className="text-primary-dark/70">
                   {problem.desc}
                 </p>
               </motion.div>
@@ -65,7 +65,7 @@ export default function ShowcaseSection() {
           />
           
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-primary-blue/40"></div>
+          <div className="absolute inset-0 bg-primary-dark/40"></div>
           
           {/* Floating Phone Mockup */}
           <motion.div

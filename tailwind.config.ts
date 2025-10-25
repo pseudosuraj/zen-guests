@@ -10,11 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#EAE8E1',           // Sophisticated light Greige
-        'primary-blue': '#003153',       // Deep, rich Prussian Blue
-        'accent-gold': '#B99470',        // Warm Burnished Gold/Bronze
+        background: '#F8F9FA',           // Clean, very light Cool Gray
+        'primary-dark': '#1F2937',       // Deep, near-black Charcoal
+        'accent-blue': '#4F46E5',        // Vibrant, sophisticated Cobalt Blue
         'card-bg': '#FFFFFF',            // Clean, crisp White
-        'border-soft': '#DCDCDC',        // Subtle border
+        'border-soft': '#E5E7EB',        // Subtle light gray
       },
       fontFamily: {
         display: [

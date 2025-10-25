@@ -38,7 +38,7 @@ export default function FeatureGrid() {
   return (
     <section className="py-24 px-6 bg-card-bg">
       <div className="max-w-7xl mx-auto">
-        <h2 className="font-display text-5xl md:text-6xl font-bold text-primary-blue mb-16 text-center">
+        <h2 className="font-display text-5xl md:text-6xl font-bold text-primary-dark mb-16 text-center">
           An OS Designed for Total Control.
         </h2>
         
@@ -49,15 +49,15 @@ export default function FeatureGrid() {
               <div
                 key={idx}
                 className="bg-background border border-border-soft rounded-2xl p-8 
-                           hover:shadow-2xl hover:border-accent-gold transition-all duration-300"
+                           hover:shadow-2xl hover:border-accent-blue transition-all duration-300"
               >
-                <div className="h-16 w-16 rounded-xl bg-accent-gold/10 flex items-center justify-center mb-6">
-                  <Icon className="w-8 h-8 text-accent-gold" />
+                <div className="h-16 w-16 rounded-xl bg-accent-blue/10 flex items-center justify-center mb-6">
+                  <Icon className="w-8 h-8 text-accent-blue" />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-primary-blue mb-3">
+                <h3 className="font-display text-2xl font-bold text-primary-dark mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-primary-blue/70 leading-relaxed">
+                <p className="text-primary-dark/70 leading-relaxed">
                   {feature.desc}
                 </p>
               </div>

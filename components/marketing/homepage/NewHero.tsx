@@ -13,16 +13,16 @@ export default function NewHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="font-display text-6xl md:text-8xl font-bold mb-6 text-primary-blue leading-tight">
+          <h1 className="font-display text-6xl md:text-8xl font-bold mb-6 text-primary-dark leading-tight">
             The End of<br />Hotel Chaos.
           </h1>
-          <p className="text-xl md:text-2xl text-primary-blue/70 mb-10 leading-relaxed">
+          <p className="text-xl md:text-2xl text-primary-dark/70 mb-10 leading-relaxed">
             Zen-Guests is the single OS that unifies your operations, unlocks hidden revenue, and delivers the 5-star digital experience your guests demand.
           </p>
           <a
             href="/pilot-program"
-            className="inline-block px-10 py-5 rounded-lg font-bold text-lg text-white bg-accent-gold
-                       hover:bg-accent-gold/90 shadow-xl hover:shadow-2xl transition-all duration-300"
+            className="inline-block px-10 py-5 rounded-lg font-bold text-lg text-white bg-accent-blue
+                       hover:bg-accent-blue/90 shadow-xl hover:shadow-2xl transition-all duration-300"
           >
             Join the Pilot Program
           </a>
