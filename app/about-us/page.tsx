@@ -4,7 +4,7 @@ import CtaSection from "@/components/marketing/shared/CtaSection";
 
 export default function AboutUsPage() {
   return (
-    <main className="pt-20">
+    <main className="flex-grow pt-20">
       <AboutHero />
       <FounderStory />
       <CtaSection />

@@ -4,8 +4,8 @@ import Image from 'next/image'
 
 export default function NewHero() {
   return (
-    <section className="min-h-[90vh] flex items-center py-20 px-6">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <section className="min-h-[90vh] flex items-center py-12 md:py-20 px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
         
         {/* Left Column - Text */}
         <motion.div
@@ -13,16 +13,16 @@ export default function NewHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="font-display text-6xl md:text-8xl font-bold mb-6 text-primary-dark leading-tight">
+          <h1 className="font-display text-4xl md:text-6xl lg:text-8xl font-bold mb-6 text-primary-blue leading-tight">
             The End of<br />Hotel Chaos.
           </h1>
-          <p className="text-xl md:text-2xl text-primary-dark/70 mb-10 leading-relaxed">
+          <p className="text-lg md:text-xl lg:text-2xl text-primary-blue/70 mb-8 md:mb-10 leading-relaxed">
             Zen-Guests is the single OS that unifies your operations, unlocks hidden revenue, and delivers the 5-star digital experience your guests demand.
           </p>
           <a
             href="/pilot-program"
-            className="inline-block px-10 py-5 rounded-lg font-bold text-lg text-white bg-accent-blue
-                       hover:bg-accent-blue/90 shadow-xl hover:shadow-2xl transition-all duration-300"
+            className="inline-block px-8 md:px-10 py-4 md:py-5 rounded-lg font-bold text-base md:text-lg text-white bg-accent-copper
+                       hover:bg-accent-copper/90 shadow-xl hover:shadow-2xl transition-all duration-300"
           >
             Join the Pilot Program
           </a>

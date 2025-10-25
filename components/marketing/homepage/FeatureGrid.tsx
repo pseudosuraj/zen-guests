@@ -36,28 +36,28 @@ const features = [
 
 export default function FeatureGrid() {
   return (
-    <section className="py-24 px-6 bg-card-bg">
+    <section className="py-16 md:py-24 px-6 bg-card-bg">
       <div className="max-w-7xl mx-auto">
-        <h2 className="font-display text-5xl md:text-6xl font-bold text-primary-dark mb-16 text-center">
+        <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold text-primary-blue mb-12 md:mb-16 text-center">
           An OS Designed for Total Control.
         </h2>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
               <div
                 key={idx}
-                className="bg-background border border-border-soft rounded-2xl p-8 
-                           hover:shadow-2xl hover:border-accent-blue transition-all duration-300"
+                className="bg-background border border-border-soft rounded-2xl p-6 md:p-8 
+                           hover:shadow-2xl hover:border-accent-copper transition-all duration-300"
               >
-                <div className="h-16 w-16 rounded-xl bg-accent-blue/10 flex items-center justify-center mb-6">
-                  <Icon className="w-8 h-8 text-accent-blue" />
+                <div className="h-14 w-14 md:h-16 md:w-16 rounded-xl bg-accent-copper/10 flex items-center justify-center mb-4 md:mb-6">
+                  <Icon className="w-7 h-7 md:w-8 md:h-8 text-accent-copper" />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-primary-dark mb-3">
+                <h3 className="font-display text-xl md:text-2xl font-bold text-primary-blue mb-2 md:mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-primary-dark/70 leading-relaxed">
+                <p className="text-primary-blue/70 leading-relaxed text-sm md:text-base">
                   {feature.desc}
                 </p>
               </div>

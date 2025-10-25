@@ -3,14 +3,14 @@ import { Button } from "@/components/ui/button"
 
 export default function CtaSection() {
   return (
-    <section className="bg-primary py-16">
+    <section className="bg-primary-blue py-16">
       <div className="max-w-xl mx-auto px-6 text-center">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-7">
           Ready to Join the Future of Indian Hospitality?
         </h2>
         <Button
           asChild
-          className="bg-accent-teal text-white text-lg font-bold px-8 py-4 rounded-lg hover:bg-accent-teal/90 transition shadow-lg"
+          className="bg-accent-copper text-white text-lg font-bold px-8 py-4 rounded-lg hover:bg-accent-copper/90 transition shadow-lg"
         >
           <a href="/book-a-demo">Book a Live Demo</a>
         </Button>

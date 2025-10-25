@@ -10,19 +10,19 @@ export default function Navbar() {
           Zen-Guests
         </Link>
         <div className="flex items-center gap-6">
-          <Link href="/about-us" className="text-primary-blue hover:text-accent-gold transition text-base font-medium">
+          <Link href="/about-us" className="text-primary-blue hover:text-accent-copper transition text-base font-medium">
             About
           </Link>
-          <Link href="/products" className="text-primary-blue hover:text-accent-gold transition text-base font-medium">
+          <Link href="/products" className="text-primary-blue hover:text-accent-copper transition text-base font-medium">
             Products
           </Link>
-          <Link href="/pricing" className="text-primary-blue hover:text-accent-gold transition text-base font-medium">
+          <Link href="/pricing" className="text-primary-blue hover:text-accent-copper transition text-base font-medium">
             Pricing
           </Link>
           <Link href="/book-a-demo">
             <span
-              className="ml-2 px-5 py-3 rounded-lg bg-accent-gold text-white font-bold 
-                         hover:bg-accent-gold/90 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="ml-2 px-5 py-3 rounded-lg bg-accent-copper text-white font-bold 
+                         hover:bg-accent-copper/90 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Book a Demo
             </span>
