@@ -12,13 +12,13 @@ export default function HeroSection() {
             Stop Managing Chaos. Start Engineering Profit.
           </h1>
           <p className="text-lg md:text-xl text-primary/80 mb-8">
-            Zen-Guests is the AI-powered OS for Indian hotels that turns guest requests into revenue and operational headaches into five-star reviews.
+            The All-in-One Revenue & Experience OS for India's Modern Hotels.
           </p>
           <div className="flex gap-4">
             <a
               href="/pilot-program"
               className="inline-block px-7 py-3 rounded-lg font-bold text-lg bg-accent-green text-white
-                         hover:bg-accent-green/80 transition"
+                         hover:bg-accent-green/80 transition shadow-lg"
               style={{ boxShadow: '0 2px 16px rgba(16,185,129,0.12)' }}
             >
               Join the Pilot Program

@@ -28,8 +28,8 @@ export default function HowItWorksSection() {
     <div className="w-full bg-slate-50 py-24 relative">
       <section className="relative max-w-6xl mx-auto px-4">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-20 text-gray-900">
-          Turn Guest Requests into Revenue in 3 Simple Steps
-          <span className="inline-block align-super text-primary ml-2 text-5xl font-bold leading-none">·</span>
+          Launch Your New Revenue Engine in 3 Simple Steps
+          <span className="inline-block align-super text-accent-green ml-2 text-5xl font-bold leading-none">·</span>
         </h2>
 
         {/* Continuous connecting line (desktop only) */}
@@ -40,7 +40,7 @@ export default function HowItWorksSection() {
 
         <div className="space-y-24 relative z-10">
           {STEPS.map((step, idx) => {
-            const isReversed = idx % 2 === 1; // Step 2 is reversed
+            const isReversed = idx % 2 === 1;
             return (
               <motion.div
                 key={idx}

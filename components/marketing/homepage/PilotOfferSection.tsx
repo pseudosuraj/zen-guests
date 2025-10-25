@@ -1,5 +1,4 @@
 'use client'
-
 import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -17,7 +16,7 @@ export default function PilotOfferSection() {
         <ul className="mb-7 space-y-3 text-left max-w-lg mx-auto">
           <li className="flex items-center gap-3">
             <CheckCircle2 className="text-accent-green flex-shrink-0" size={22} />
-            <span><b>Free access</b> for the first 3 months.</span>
+            <span><b>Free access</b> for the first 6 months.</span>
           </li>
           <li className="flex items-center gap-3">
             <CheckCircle2 className="text-accent-green flex-shrink-0" size={22} />
