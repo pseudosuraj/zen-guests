@@ -10,14 +10,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        background: '#F9F9F9',           // Soft, warm Off-White
         primary: {
-          DEFAULT: "#111827",  // Deep charcoal
+          DEFAULT: '#2B2A4C',            // Deep, rich Indigo
+          dark: '#1F1E38',
         },
         accent: {
-          green: "#10B981",    // Vibrant modern green
-        },
-        text: {
-          light: "#D1D5DB",    // Soft light gray for text on dark
+          teal: '#008080',               // Vibrant, sophisticated Teal
+          'teal-light': '#E0F2F1',       // Very light Teal for subtle backgrounds
         },
       },
       fontFamily: {

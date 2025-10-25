@@ -25,11 +25,11 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <div className="w-full bg-slate-50 py-24 relative">
+    <div className="w-full py-24 relative">
       <section className="relative max-w-6xl mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-20 text-gray-900">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-20 text-primary">
           Launch Your New Revenue Engine in 3 Simple Steps
-          <span className="inline-block align-super text-accent-green ml-2 text-5xl font-bold leading-none">·</span>
+          <span className="inline-block align-super text-accent-teal ml-2 text-5xl font-bold leading-none">·</span>
         </h2>
 
         {/* Continuous connecting line (desktop only) */}
@@ -69,10 +69,10 @@ export default function HowItWorksSection() {
                 {/* Text Side */}
                 <div className="flex-1 flex flex-col justify-center text-center md:text-left">
                   <div className="flex items-center gap-3 mb-4 justify-center md:justify-start">
-                    <span className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-100 text-primary text-sm font-bold shadow">
+                    <span className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-accent-teal-light text-accent-teal text-sm font-bold shadow">
                       {step.step}
                     </span>
-                    <span className="font-bold text-3xl text-gray-900">
+                    <span className="font-bold text-3xl text-primary">
                       {step.title}
                     </span>
                   </div>

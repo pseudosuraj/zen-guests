@@ -10,7 +10,7 @@ export default function CtaSection() {
         </h2>
         <Button
           asChild
-          className="bg-accent-green text-white text-lg font-bold px-8 py-4 rounded-lg hover:bg-accent-green/90 transition"
+          className="bg-accent-teal text-white text-lg font-bold px-8 py-4 rounded-lg hover:bg-accent-teal/90 transition shadow-lg"
         >
           <a href="/book-a-demo">Book a Live Demo</a>
         </Button>

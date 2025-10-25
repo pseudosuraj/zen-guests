@@ -15,23 +15,23 @@ export default function PilotOfferSection() {
         </div>
         <ul className="mb-7 space-y-3 text-left max-w-lg mx-auto">
           <li className="flex items-center gap-3">
-            <CheckCircle2 className="text-accent-green flex-shrink-0" size={22} />
-            <span><b>Free access</b> for the first 6 months.</span>
+            <CheckCircle2 className="text-accent-teal flex-shrink-0" size={22} />
+            <span className="text-primary"><b>Free access</b> for the first 6 months.</span>
           </li>
           <li className="flex items-center gap-3">
-            <CheckCircle2 className="text-accent-green flex-shrink-0" size={22} />
-            <span><b>Dedicated onboarding and support.</b></span>
+            <CheckCircle2 className="text-accent-teal flex-shrink-0" size={22} />
+            <span className="text-primary"><b>Dedicated onboarding and support.</b></span>
           </li>
           <li className="flex items-center gap-3">
-            <CheckCircle2 className="text-accent-green flex-shrink-0" size={22} />
-            <span><b>Direct influence</b> on our product roadmap.</span>
+            <CheckCircle2 className="text-accent-teal flex-shrink-0" size={22} />
+            <span className="text-primary"><b>Direct influence</b> on our product roadmap.</span>
           </li>
           <li className="flex items-center gap-3">
-            <CheckCircle2 className="text-accent-green flex-shrink-0" size={22} />
-            <span><b>Be featured as an industry innovator.</b></span>
+            <CheckCircle2 className="text-accent-teal flex-shrink-0" size={22} />
+            <span className="text-primary"><b>Be featured as an industry innovator.</b></span>
           </li>
         </ul>
-        <Button className="bg-accent-green text-white px-7 py-3 font-bold text-lg hover:bg-accent-green/90 transition">
+        <Button className="bg-accent-teal text-white px-7 py-3 font-bold text-lg hover:bg-accent-teal/90 transition shadow-lg">
           Apply for a Limited Spot
         </Button>
       </div>

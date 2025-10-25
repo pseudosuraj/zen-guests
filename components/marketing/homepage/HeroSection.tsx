@@ -17,9 +17,9 @@ export default function HeroSection() {
           <div className="flex gap-4">
             <a
               href="/pilot-program"
-              className="inline-block px-7 py-3 rounded-lg font-bold text-lg bg-accent-green text-white
-                         hover:bg-accent-green/80 transition shadow-lg"
-              style={{ boxShadow: '0 2px 16px rgba(16,185,129,0.12)' }}
+              className="inline-block px-7 py-3 rounded-lg font-bold text-lg bg-accent-teal text-white
+                         hover:bg-accent-teal/90 transition shadow-lg"
+              style={{ boxShadow: '0 2px 16px rgba(0,128,128,0.12)' }}
             >
               Join the Pilot Program
             </a>

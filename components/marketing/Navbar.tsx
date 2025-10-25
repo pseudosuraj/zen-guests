@@ -10,19 +10,19 @@ export default function Navbar() {
           Zen-Guests
         </Link>
         <div className="flex items-center gap-6">
-          <Link href="/about-us" className="text-primary hover:text-accent-green transition text-base font-medium">
+          <Link href="/about-us" className="text-primary hover:text-accent-teal transition text-base font-medium">
             About
           </Link>
-          <Link href="/products" className="text-primary hover:text-accent-green transition text-base font-medium">
+          <Link href="/products" className="text-primary hover:text-accent-teal transition text-base font-medium">
             Products
           </Link>
-          <Link href="/pricing" className="text-primary hover:text-accent-green transition text-base font-medium">
+          <Link href="/pricing" className="text-primary hover:text-accent-teal transition text-base font-medium">
             Pricing
           </Link>
           <Link href="/book-a-demo">
             <span
-              className="ml-2 px-5 py-2 rounded-lg bg-accent-green text-white font-bold shadow hover:bg-accent-green/80 transition"
-              style={{ boxShadow: '0 2px 14px rgba(16,185,129,0.08)' }}
+              className="ml-2 px-5 py-2 rounded-lg bg-accent-teal text-white font-bold shadow hover:bg-accent-teal/90 transition"
+              style={{ boxShadow: '0 2px 14px rgba(0,128,128,0.12)' }}
             >
               Book a Demo
             </span>

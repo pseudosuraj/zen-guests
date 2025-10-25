@@ -12,8 +12,8 @@ export default function ProblemSolutionSection() {
 
           {/* Card 1: Front Desk Chaos */}
           <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
-              <PhoneCall className="w-7 h-7 text-green-600" />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-accent-teal-light mb-4">
+              <PhoneCall className="w-7 h-7 text-accent-teal" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">Front Desk Chaos</h3>
             <p className="text-gray-700">
@@ -23,8 +23,8 @@ export default function ProblemSolutionSection() {
 
           {/* Card 2: Revenue Leakage */}
           <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
-              <IndianRupee className="w-7 h-7 text-green-600" />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-accent-teal-light mb-4">
+              <IndianRupee className="w-7 h-7 text-accent-teal" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">Revenue Leakage</h3>
             <p className="text-gray-700">
@@ -34,8 +34,8 @@ export default function ProblemSolutionSection() {
 
           {/* Card 3: Negative Online Review */}
           <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-green-100 mb-4">
-              <StarOff className="w-7 h-7 text-green-600" />
+            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-accent-teal-light mb-4">
+              <StarOff className="w-7 h-7 text-accent-teal" />
             </div>
             <h3 className="text-xl font-bold text-primary mb-2">Negative Online Review</h3>
             <p className="text-gray-700">

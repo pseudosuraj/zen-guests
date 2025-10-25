@@ -4,17 +4,16 @@
 
 @layer base {
   html, body {
-    background-color: #F7FAFC;   /* premium light gray */
-    color: #1A202C;              /* premium navy blue */
+    background-color: #F9F9F9;   /* New soft off-white background */
+    color: #2B2A4C;              /* Deep Indigo text */
     font-family: 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif;
-    /* Do NOT use @apply font-sans; here */
   }
   a {
-    color: #1A202C;
+    color: #2B2A4C;
     transition: color 0.2s;
     text-decoration: none;
   }
   a:hover {
-    color: #FBBF24;
+    color: #008080;
   }
 }
