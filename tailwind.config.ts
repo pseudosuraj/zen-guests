@@ -10,11 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#F5F5DC',           // Warm, elegant Beige
-        'primary-dark': '#2F4F4F',       // Deep Dark Slate Gray
-        'accent-emerald': '#009B77',     // Rich, vibrant Emerald Green
-        'card-bg': '#FFFFFF',            // Clean white for cards
-        'border-soft': '#E5E5E5',        // Subtle border
+        background: '#FEFBF6',           // Warm, elegant Cream
+        'text-primary': '#3D3C3A',       // Professional dark Taupe
+        'accent-terracotta': '#E07A5F',  // Warm, inviting Terracotta
+        'card-bg': '#FFFFFF',            // Clean, crisp White
+        'border-soft': '#F3EFEA',        // Very subtle border
       },
       fontFamily: {
         display: [
@@ -34,15 +34,6 @@ const config: Config = {
           'Roboto'
         ],
       },
-      animation: {
-        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
-      },
-      keyframes: {
-        'glow-pulse': {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(0,155,119,0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(0,155,119,0.6), 0 0 60px rgba(0,155,119,0.4)' },
-        }
-      }
     },
   },
   plugins: [],
