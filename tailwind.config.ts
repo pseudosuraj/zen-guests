@@ -10,11 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#FEFBF6',           // Warm, elegant Cream
-        'text-primary': '#3D3C3A',       // Professional dark Taupe
-        'accent-terracotta': '#E07A5F',  // Warm, inviting Terracotta
+        background: '#EAE8E1',           // Sophisticated light Greige
+        'primary-blue': '#003153',       // Deep, rich Prussian Blue
+        'accent-gold': '#B99470',        // Warm Burnished Gold/Bronze
         'card-bg': '#FFFFFF',            // Clean, crisp White
-        'border-soft': '#F3EFEA',        // Very subtle border
+        'border-soft': '#DCDCDC',        // Subtle border
       },
       fontFamily: {
         display: [

@@ -1,43 +1,55 @@
 'use client'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 
 export default function NewHero() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center py-20 px-6 text-center">
-      <div className="max-w-5xl mx-auto">
-        {/* Enormous Headline */}
-        <h1 className="font-display text-6xl md:text-8xl font-bold mb-6 text-text-primary leading-tight">
-          The Calm Control Center<br />for Your Hotel.
-        </h1>
+    <section className="min-h-[90vh] flex items-center py-20 px-6">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
         
-        {/* Sub-headline */}
-        <p className="text-xl md:text-2xl text-text-secondary mb-12 leading-relaxed max-w-3xl mx-auto">
-          Zen-Guests is the OS for Indian hotels that replaces chaos with calm, and missed opportunities with effortless revenue.
-        </p>
-        
-        {/* Central Visual - Breathing Dashboard Mockup */}
-        <div className="relative max-w-4xl mx-auto mb-12">
-          <div className="rounded-2xl overflow-hidden border border-border-soft shadow-2xl animate-breathe">
+        {/* Left Column - Text */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h1 className="font-display text-6xl md:text-8xl font-bold mb-6 text-primary-blue leading-tight">
+            The End of<br />Hotel Chaos.
+          </h1>
+          <p className="text-xl md:text-2xl text-primary-blue/70 mb-10 leading-relaxed">
+            Zen-Guests is the single OS that unifies your operations, unlocks hidden revenue, and delivers the 5-star digital experience your guests demand.
+          </p>
+          <a
+            href="/pilot-program"
+            className="inline-block px-10 py-5 rounded-lg font-bold text-lg text-white bg-accent-gold
+                       hover:bg-accent-gold/90 shadow-xl hover:shadow-2xl transition-all duration-300"
+          >
+            Join the Pilot Program
+          </a>
+        </motion.div>
+
+        {/* Right Column - Floating Dashboard Mockup */}
+        <motion.div
+          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="relative"
+        >
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="rounded-2xl overflow-hidden border-2 border-border-soft bg-card-bg shadow-2xl"
+          >
             <Image
-              src="/images/dashboard-zen-mockup.png"
+              src="/images/dashboard-hero.png"
               alt="Zen-Guests Dashboard"
-              width={1200}
-              height={700}
+              width={800}
+              height={600}
               className="w-full h-auto object-cover"
               priority
             />
-          </div>
-        </div>
-        
-        {/* Single Prominent CTA */}
-        <a
-          href="/pilot-program"
-          className="inline-block px-10 py-5 rounded-full font-bold text-xl text-white bg-accent-terracotta
-                     hover:bg-accent-terracotta/90 shadow-2xl hover:shadow-accent-terracotta/50 
-                     transition-all duration-300 transform hover:scale-105"
-        >
-          Discover the Future of Hospitality
-        </a>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )

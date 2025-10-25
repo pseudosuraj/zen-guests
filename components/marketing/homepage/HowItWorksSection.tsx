@@ -25,9 +25,9 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <div className="w-full py-24 relative px-6 bg-card-bg">
+    <div className="w-full py-24 relative px-6 bg-background">
       <section className="relative max-w-6xl mx-auto">
-        <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-20 text-text-primary">
+        <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-20 text-primary-blue">
           Launch Your New Revenue Engine in 3 Simple Steps
         </h2>
 
@@ -47,7 +47,7 @@ export default function HowItWorksSection() {
               >
                 {/* Image */}
                 <div className="flex-1 w-full">
-                  <div className="rounded-3xl overflow-hidden border border-border-soft bg-background shadow-xl">
+                  <div className="rounded-3xl overflow-hidden border border-border-soft bg-card-bg shadow-xl">
                     <Image
                       src={step.img}
                       alt={step.title}
@@ -63,14 +63,14 @@ export default function HowItWorksSection() {
                 <div className="flex-1 flex flex-col justify-center text-center md:text-left">
                   <div className="flex items-center gap-3 mb-4 justify-center md:justify-start">
                     <span className="inline-flex items-center justify-center px-4 py-2 rounded-full 
-                                     bg-accent-terracotta/10 border border-accent-terracotta text-accent-terracotta text-sm font-bold">
+                                     bg-accent-gold/10 border border-accent-gold text-accent-gold text-sm font-bold">
                       {step.step}
                     </span>
-                    <span className="font-bold text-2xl text-text-primary">
+                    <span className="font-bold text-2xl text-primary-blue">
                       {step.title}
                     </span>
                   </div>
-                  <p className="text-text-primary/70 text-lg leading-relaxed">
+                  <p className="text-primary-blue/70 text-lg leading-relaxed">
                     {step.desc}
                   </p>
                 </div>

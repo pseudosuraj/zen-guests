@@ -1,17 +1,17 @@
-import AnimatedHero from "@/components/marketing/homepage/AnimatedHero";
-import NewTrustBar from "@/components/marketing/homepage/NewTrustBar";
-import InteractiveShowcase from "@/components/marketing/homepage/InteractiveShowcase";
+import NewHero from "@/components/marketing/homepage/NewHero";
+import ShowcaseSection from "@/components/marketing/homepage/ShowcaseSection";
+import FeatureGrid from "@/components/marketing/homepage/FeatureGrid";
 import HowItWorksSection from "@/components/marketing/homepage/HowItWorksSection";
 import PilotOfferSection from "@/components/marketing/homepage/PilotOfferSection";
 
 export default function Home() {
   return (
     <main className="bg-background">
-      <AnimatedHero />
+      <NewHero />
       
-      <NewTrustBar />
+      <ShowcaseSection />
       
-      <InteractiveShowcase />
+      <FeatureGrid />
       
       <HowItWorksSection />
       
