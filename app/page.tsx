@@ -9,18 +9,43 @@ import PilotOfferSection from "@/components/marketing/homepage/PilotOfferSection
 export default function Home() {
   return (
     <>
+      {/* White */}
       <HeroSection />
-      <TrustBar />
+      
+      {/* Gray */}
+      <div className="bg-slate-50">
+        <TrustBar />
+      </div>
+      
       <div className="my-16" />
+      
+      {/* White */}
       <ProblemSolutionSection />
+      
       <div className="my-16" />
-      <HowItWorksSection />
+      
+      {/* Gray */}
+      <div className="bg-slate-50">
+        <HowItWorksSection />
+      </div>
+      
       <div className="my-16" />
+      
+      {/* White */}
       <FeatureHighlightsSection />
+      
       <div className="my-16" />
-      <PilotProofSection />
+      
+      {/* Gray */}
+      <div className="bg-slate-50">
+        <PilotProofSection />
+      </div>
+      
       <div className="my-16" />
+      
+      {/* White */}
       <PilotOfferSection />
+      
       <div className="mb-10" />
     </>
   );
