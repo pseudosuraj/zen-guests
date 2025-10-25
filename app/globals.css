@@ -4,16 +4,16 @@
 
 @layer base {
   html, body {
-    background-color: #F9F9F9;   /* New soft off-white background */
-    color: #2B2A4C;              /* Deep Indigo text */
+    background-color: #F5F5DC;   /* Warm beige */
+    color: #2F4F4F;              /* Dark slate gray */
     font-family: 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif;
   }
   a {
-    color: #2B2A4C;
+    color: #2F4F4F;
     transition: color 0.2s;
     text-decoration: none;
   }
   a:hover {
-    color: #008080;
+    color: #009B77;
   }
 }

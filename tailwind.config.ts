@@ -10,15 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#F9F9F9',           // Soft, warm Off-White
-        primary: {
-          DEFAULT: '#2B2A4C',            // Deep, rich Indigo
-          dark: '#1F1E38',
-        },
-        accent: {
-          teal: '#008080',               // Vibrant, sophisticated Teal
-          'teal-light': '#E0F2F1',       // Very light Teal for subtle backgrounds
-        },
+        background: '#F5F5DC',           // Warm, elegant Beige
+        'primary-dark': '#2F4F4F',       // Deep Dark Slate Gray
+        'accent-emerald': '#009B77',     // Rich, vibrant Emerald Green
+        'card-bg': '#FFFFFF',            // Clean white for cards
+        'border-soft': '#E5E5E5',        // Subtle border
       },
       fontFamily: {
         display: [
@@ -38,6 +34,15 @@ const config: Config = {
           'Roboto'
         ],
       },
+      animation: {
+        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+      },
+      keyframes: {
+        'glow-pulse': {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(0,155,119,0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(0,155,119,0.6), 0 0 60px rgba(0,155,119,0.4)' },
+        }
+      }
     },
   },
   plugins: [],

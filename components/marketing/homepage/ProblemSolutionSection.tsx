@@ -3,43 +3,40 @@ import { PhoneCall, IndianRupee, StarOff } from 'lucide-react'
 
 export default function ProblemSolutionSection() {
   return (
-    <section className="bg-white py-16">
-      <div className="max-w-5xl mx-auto px-6 text-center">
-        <h2 className="font-display text-2xl md:text-3xl font-bold text-primary mb-7">
+    <section className="py-24 px-6">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="font-display text-3xl md:text-5xl font-bold text-text-primary mb-16 text-center">
           You're Losing Revenue and Reputation in the Details.
         </h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3">
 
           {/* Card 1: Front Desk Chaos */}
-          <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-accent-teal-light mb-4">
-              <PhoneCall className="w-7 h-7 text-accent-teal" />
-            </div>
-            <h3 className="text-xl font-bold text-primary mb-2">Front Desk Chaos</h3>
-            <p className="text-gray-700">
+          <div className="bg-subtle-gray border border-border-gray rounded-2xl p-8 flex flex-col items-center
+                          transition-all duration-300 hover:border-accent-purple hover:shadow-[0_0_25px_rgba(138,43,226,0.4)]">
+            <PhoneCall className="w-12 h-12 text-text-primary mb-6" />
+            <h3 className="text-xl font-bold text-text-primary mb-3">Front Desk Chaos</h3>
+            <p className="text-text-secondary text-center leading-relaxed">
               Guest requests via calls and WhatsApp create confusion, leading to slow service and negative online reviews.
             </p>
           </div>
 
           {/* Card 2: Revenue Leakage */}
-          <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-accent-teal-light mb-4">
-              <IndianRupee className="w-7 h-7 text-accent-teal" />
-            </div>
-            <h3 className="text-xl font-bold text-primary mb-2">Revenue Leakage</h3>
-            <p className="text-gray-700">
+          <div className="bg-subtle-gray border border-border-gray rounded-2xl p-8 flex flex-col items-center
+                          transition-all duration-300 hover:border-accent-purple hover:shadow-[0_0_25px_rgba(138,43,226,0.4)]">
+            <IndianRupee className="w-12 h-12 text-text-primary mb-6" />
+            <h3 className="text-xl font-bold text-text-primary mb-3">Revenue Leakage</h3>
+            <p className="text-text-secondary text-center leading-relaxed">
               Every guest order on an external app is a high-margin opportunity lost. This hidden leakage costs you lakhs every year.
             </p>
           </div>
 
-          {/* Card 3: Negative Online Review */}
-          <div className="bg-white p-8 rounded-xl shadow flex flex-col items-center border border-gray-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="h-14 w-14 rounded-full flex items-center justify-center bg-accent-teal-light mb-4">
-              <StarOff className="w-7 h-7 text-accent-teal" />
-            </div>
-            <h3 className="text-xl font-bold text-primary mb-2">Negative Online Review</h3>
-            <p className="text-gray-700">
-              A single bad review from a poorly handled request can damage your reputation and impact future bookings. Manual systems create inconsistent experiences.
+          {/* Card 3: Negative Reviews */}
+          <div className="bg-subtle-gray border border-border-gray rounded-2xl p-8 flex flex-col items-center
+                          transition-all duration-300 hover:border-accent-purple hover:shadow-[0_0_25px_rgba(138,43,226,0.4)]">
+            <StarOff className="w-12 h-12 text-text-primary mb-6" />
+            <h3 className="text-xl font-bold text-text-primary mb-3">Negative Online Review</h3>
+            <p className="text-text-secondary text-center leading-relaxed">
+              A single bad review from a poorly handled request can damage your reputation and impact future bookings.
             </p>
           </div>
         </div>

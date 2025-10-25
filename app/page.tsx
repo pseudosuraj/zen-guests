@@ -1,52 +1,23 @@
-import HeroSection from "@/components/marketing/homepage/HeroSection";
-import TrustBar from "@/components/marketing/homepage/TrustBar";
-import ProblemSolutionSection from "@/components/marketing/homepage/ProblemSolutionSection";
+import NewHero from "@/components/marketing/homepage/NewHero";
+import BentoGrid from "@/components/marketing/homepage/BentoGrid";
 import HowItWorksSection from "@/components/marketing/homepage/HowItWorksSection";
-import FeatureHighlightsSection from "@/components/marketing/homepage/FeatureHighlightsSection";
-import PilotProofSection from "@/components/marketing/homepage/PilotProofSection";
+import FeatureShowcase from "@/components/marketing/homepage/FeatureShowcase";
 import PilotOfferSection from "@/components/marketing/homepage/PilotOfferSection";
 
 export default function Home() {
   return (
-    <>
-      {/* White */}
-      <HeroSection />
+    <main className="bg-background">
+      <NewHero />
       
-      {/* Gray */}
-      <div className="bg-slate-50">
-        <TrustBar />
-      </div>
+      <BentoGrid />
       
-      <div className="my-16" />
+      <HowItWorksSection />
       
-      {/* White */}
-      <ProblemSolutionSection />
+      <FeatureShowcase />
       
-      <div className="my-16" />
-      
-      {/* Gray */}
-      <div className="bg-slate-50">
-        <HowItWorksSection />
-      </div>
-      
-      <div className="my-16" />
-      
-      {/* White */}
-      <FeatureHighlightsSection />
-      
-      <div className="my-16" />
-      
-      {/* Gray */}
-      <div className="bg-slate-50">
-        <PilotProofSection />
-      </div>
-      
-      <div className="my-16" />
-      
-      {/* White */}
       <PilotOfferSection />
       
-      <div className="mb-10" />
-    </>
+      <div className="mb-20" />
+    </main>
   );
 }
