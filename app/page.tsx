@@ -1,23 +1,19 @@
-import NewHero from "@/components/marketing/homepage/NewHero";
-import ShowcaseSection from "@/components/marketing/homepage/ShowcaseSection";
-import FeatureGrid from "@/components/marketing/homepage/FeatureGrid";
-import HowItWorksSection from "@/components/marketing/homepage/HowItWorksSection";
-import PilotOfferSection from "@/components/marketing/homepage/PilotOfferSection";
+import Hero from '@/components/marketing/homepage/Hero'
+import Transformation from '@/components/marketing/homepage/Transformation'
+import FeatureShowcase from '@/components/marketing/homepage/FeatureShowcase'
+import HowItWorksSection from '@/components/marketing/homepage/HowItWorksSection'
+import Mission from '@/components/marketing/homepage/Mission'
+import PilotOfferSection from '@/components/marketing/homepage/PilotOfferSection'
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="bg-background">
-      <NewHero />
-      
-      <ShowcaseSection />
-      
-      <FeatureGrid />
-      
+    <main className="flex-grow">
+      <Hero />
+      <Transformation />
+      <FeatureShowcase />
       <HowItWorksSection />
-      
+      <Mission />
       <PilotOfferSection />
-      
-      <div className="mb-20" />
     </main>
-  );
+  )
 }
