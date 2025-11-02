@@ -9,14 +9,11 @@ import { Progress } from "@/components/ui/progress"
 import { Upload } from "lucide-react"
 
 interface CheckInPageProps {
-  params: Promise<{
-    bookingId: string
-  }>
+  params: { bookingId: string }
 }
 
-export default async function CheckInPage({ params }: CheckInPageProps) {
-  // Unwrap the params Promise using React.use()
-  const { bookingId } = await params;
+export default function CheckInPage({ params }: CheckInPageProps) {
+  const { bookingId } = params;
   
   const [currentStep, setCurrentStep] = useState(1)
   const [guestData, setGuestData] = useState({
