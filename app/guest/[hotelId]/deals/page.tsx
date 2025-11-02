@@ -3,8 +3,8 @@ import { prisma } from '@/lib/prisma';
 import DealsListClient from './DealsListClient';
 
 interface Props {
-  params: Promise<{ hotelId: string }>;
-  searchParams: Promise<{ roomNumber?: string; guestName?: string }>;
+  params: { hotelId: string };
+  searchParams: { roomNumber?: string; guestName?: string };
 }
 
 export default async function DealsPage({ params, searchParams }: Props) {
