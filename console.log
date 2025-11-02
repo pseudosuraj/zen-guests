@@ -1,0 +1,16 @@
+async function handleSignup(e: React.FormEvent) {
+  e.preventDefault();
+  const res = await fetch("/api/auth/signup", {
+    method: "POST",
+    body: JSON.stringify({ email, password, name, hotelId }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json();
+  // Add this:
+  alert(JSON.stringify(data));
+  if (data.success) {
+    setMessage("Signup successful! Please check your email for verification.");
+  } else {
+    setMessage("Signup failed. " + (data.error ?? ""));
+  }
+}

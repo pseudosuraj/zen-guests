@@ -1,58 +1,61 @@
-import ProductsHero from "@/components/marketing/products/ProductsHero";
-import FeatureSection from "@/components/marketing/products/FeatureSection";
-import { TrendingUp, Zap, Star } from "lucide-react";
+import ProductHero from '@/components/products/ProductHero'
+import FeatureShowcase from '@/components/products/FeatureShowcase'
+import PilotOfferSection from '@/components/marketing/homepage/PilotOfferSection'
 
 export default function ProductsPage() {
   return (
-    <main className="flex-grow pt-20">
-      <ProductsHero />
-      <FeatureSection
-        title="Revenue Engine"
-        subtitle="Maximize every stay with instant up-sell tools, automatic revenue tracking, and a seamless guest purchase experience."
-        img="/images/products-revenue-engine.png"
-        featureList={
-          <ul className="list-disc ml-5 text-primary-blue">
-            <li>Launch offers and up-sells in seconds—no IT support needed</li>
-            <li>Every guest sees only what's relevant for their room and booking</li>
-            <li>Real-time notifications for every purchase</li>
-            <li>Fully integrated UPI & digital payments</li>
-          </ul>
-        }
-        outcomeIcon={<TrendingUp className="w-6 h-6" />}
-        outcomeText="+27% Average Increase in Ancillary Revenue"
+    <main className="bg-background pt-20">
+      <ProductHero />
+
+      <FeatureShowcase
+        imageSrc="/mockups/upsell.png"
+        title="The Proactive Upsell Engine"
+        description="Stop leaving money on the table. Our AI-powered engine automatically offers the right upsell to the right guest at the right time—from pre-arrival upgrades to in-stay packages."
+        bullets={[
+          'Personalized offers for every guest',
+          'Automated delivery via web & WhatsApp',
+          'Full revenue tracking and analytics',
+        ]}
       />
-      <FeatureSection
+
+      <FeatureShowcase
+        imageSrc="/mockups/digital-minibar.png"
+        title="The Digital Minibar"
+        description="Reinvent your in-room sales. Guests can browse and order from a beautiful digital menu, with every purchase instantly tracked. No more manual checks, no more lost revenue."
+        bullets={[
+          'Visual menu on guest device',
+          'Easy UPI & card payments',
+          'Auto-notification to staff and managers',
+        ]}
         reverse
-        title="Operational Zen Engine"
-        subtitle="No more WhatsApp chaos. Assign, track, and close guest requests from one simple dashboard—everyone's accountable, nothing gets missed."
-        img="/images/products-operations-engine.png"
-        featureList={
-          <ul className="list-disc ml-5 text-primary-blue">
-            <li>Centralized, real-time assignment of all guest and housekeeping tasks</li>
-            <li>Team progress and completion tracked at every stage</li>
-            <li>Automatic alerts for overdue or urgent issues</li>
-            <li>Management insights to prevent recurring bottlenecks</li>
-          </ul>
-        }
-        outcomeIcon={<Zap className="w-6 h-6" />}
-        outcomeText="5-Minute Average Resolution Time for Guest Requests"
       />
-      <FeatureSection
-        title="Hyper-Local Experience Engine"
-        subtitle="Connect every guest to local cuisine, spa, and curated experiences—your property becomes the centerpiece of their trip."
-        img="/images/products-experience-engine.png"
-        featureList={
-          <ul className="list-disc ml-5 text-primary-blue">
-            <li>Dynamic menus, spa, and minibar updated with one tap</li>
-            <li>Personalized upsells based on guest preferences</li>
-            <li>Integrated feedback and instant review requests</li>
-            <li>Direct chat with staff, concierge, or management</li>
-          </ul>
-        }
-        outcomeIcon={<Star className="w-6 h-6" />}
-        outcomeText="9.2/10 Average Guest Experience Rating"
+
+      <FeatureShowcase
+        imageSrc="/mockups/marketplace.png"
+        title="The In-House Marketplace"
+        description="Why let guests order from Swiggy? Our marketplace turns your hotel into a premium fulfillment center for local food and services. You control the experience and, for the first time, you earn a commission on every order."
+        bullets={[
+          'Local F&B, groceries, laundry, and more',
+          'Direct hotel commission on all orders',
+          'Guest experience stays fully white-labeled',
+        ]}
       />
-      <div className="mb-16" />
+
+      <FeatureShowcase
+        imageSrc="/mockups/tasks.png"
+        title="The Staff Task Manager"
+        description="End the front desk chaos. Every guest request—from a chat message to a minibar order—is instantly converted into a trackable task and sent to the right staff member’s phone."
+        bullets={[
+          'Real-time, mobile-first staff assignment',
+          'Task tracking, reminders, and fulfillment SLAs',
+          'All activity visible to managers and owners',
+        ]}
+        reverse
+      />
+
+      <div className="mt-14">
+        <PilotOfferSection />
+      </div>
     </main>
-  );
+  )
 }

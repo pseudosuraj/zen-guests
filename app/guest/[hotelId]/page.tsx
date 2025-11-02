@@ -1,122 +1,101 @@
-'use client'
+'use client';
 
-import Image from "next/image"
-import { use, useEffect, useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { createTaskDirect } from "@/app/actions/createTask"
-import { purchaseUpsell } from "@/app/actions/purchaseUpsell"
-import { Plus, Minus, ShoppingCart } from "lucide-react"
+import Image from "next/image";
+import { useEffect, useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { createTaskDirect } from "@/app/actions/createTask";
+import { purchaseUpsell } from "@/app/actions/purchaseUpsell";
+import { Plus, Minus, ShoppingCart } from "lucide-react";
 
 interface UpsellDeal {
-  id: string
-  name: string
-  price: number
-  description: string | null
-  imageUrl: string | null
-  type: string | null
-  active: boolean
+  id: string;
+  name: string;
+  price: number;
+  description: string | null;
+  imageUrl: string | null;
+  type: string | null;
+  active: boolean;
 }
 
 interface RegularDeal {
-  id: string
-  title: string
-  description: string | null
-  price: number
+  id: string;
+  title: string;
+  description: string | null;
+  price: number;
 }
 
 interface MinibarItem {
-  id: string
-  name: string
-  price: number
-  category: string
-  isAvailable: boolean
-  stockQuantity?: number
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  isAvailable: boolean;
+  stockQuantity?: number;
 }
 
-interface PageProps {
-  params: Promise<{
-    hotelId: string
-  }>
-}
+export default function GuestPortalPage({ params }: { params: { hotelId: string } }) {
+  const hotelId = params.hotelId;
 
-export default async function GuestPortalPage({ params }: PageProps) {
-  const { hotelId } = await params; 
+  const [deals, setDeals] = useState<UpsellDeal[]>([]);
+  const [regularDeals, setRegularDeals] = useState<RegularDeal[]>([]);
+  const [minibarItems, setMinibarItems] = useState<MinibarItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [hotelName, setHotelName] = useState('Loading...');
+  const [purchasingDealId, setPurchasingDealId] = useState<string | null>(null);
 
-  const [deals, setDeals] = useState<UpsellDeal[]>([])
-  const [regularDeals, setRegularDeals] = useState<RegularDeal[]>([])
-  const [minibarItems, setMinibarItems] = useState<MinibarItem[]>([])
-  const [loading, setLoading] = useState(true)
-  const [hotelName, setHotelName] = useState('Loading...')
-  const [purchasingDealId, setPurchasingDealId] = useState<string | null>(null)
-  
-  const [medicineRequest, setMedicineRequest] = useState('')
-  const [laundryDetails, setLaundryDetails] = useState('')
-  const [showMedicineForm, setShowMedicineForm] = useState(false)
-  const [showLaundryForm, setShowLaundryForm] = useState(false)
-  const [showMenuOrderForm, setShowMenuOrderForm] = useState(false)
-  const [menuOrder, setMenuOrder] = useState('')
-  
-  const [minibarCart, setMinibarCart] = useState<Record<string, number>>({})
+  const [medicineRequest, setMedicineRequest] = useState('');
+  const [laundryDetails, setLaundryDetails] = useState('');
+  const [showMedicineForm, setShowMedicineForm] = useState(false);
+  const [showLaundryForm, setShowLaundryForm] = useState(false);
+  const [showMenuOrderForm, setShowMenuOrderForm] = useState(false);
+  const [menuOrder, setMenuOrder] = useState('');
 
-  const GUEST_NAME = 'Priya Sharma'
-  const ROOM_NUMBER = '204'
-  const [wifiInfo, setWifiInfo] = useState({ name: 'Loading...', password: '****' })
+  const [minibarCart, setMinibarCart] = useState<Record<string, number>>({});
 
+  const GUEST_NAME = 'Priya Sharma';
+  const ROOM_NUMBER = '204';
+  const [wifiInfo, setWifiInfo] = useState({ name: 'Loading...', password: '****' });
 
   useEffect(() => {
     async function fetchData() {
       try {
-        setLoading(true)
-        
-        // Fetch UpsellDeals
-        const dealsRes = await fetch(`/api/hotels/${hotelId}/deals`, { cache: 'no-store' })
-        if (dealsRes.ok) {
-          const dealsData = await dealsRes.json()
-          setDeals(dealsData)
-        }
+        setLoading(true);
 
-        // Fetch hotel info including WiFi
-        const hotelRes = await fetch(`/api/hotels/${hotelId}/info`, { cache: 'no-store' })
+        const dealsRes = await fetch(`/api/hotels/${hotelId}/deals`, { cache: 'no-store' });
+        setDeals(dealsRes.ok ? await dealsRes.json() : []);
+
+        const hotelRes = await fetch(`/api/hotels/${hotelId}/info`, { cache: 'no-store' });
         if (hotelRes.ok) {
-         const hotelData = await hotelRes.json()
-         setHotelName(hotelData.name || 'Your Hotel')
-         setWifiInfo({
-         name: hotelData.wifiName || 'Hotel WiFi',
-         password: hotelData.wifiPassword || 'Ask Front Desk'
-  })
-}
-        // Fetch regular Deals from Deal table
-        const regularDealsRes = await fetch(`/api/hotels/${hotelId}/regular-deals`, { cache: 'no-store' })
-        if (regularDealsRes.ok) {
-          const regularDealsData = await regularDealsRes.json()
-          setRegularDeals(regularDealsData)
+          const hotelData = await hotelRes.json();
+          setHotelName(hotelData.name || 'Your Hotel');
+          setWifiInfo({
+            name: hotelData.wifiName || 'Hotel WiFi',
+            password: hotelData.wifiPassword || 'Ask Front Desk'
+          });
         }
 
-        // Fetch minibar items
-        const minibarRes = await fetch(`/api/hotels/${hotelId}/minibar`, { cache: 'no-store' })
-        if (minibarRes.ok) {
-          const minibarData = await minibarRes.json()
-          setMinibarItems(minibarData)
-        }
+        const regularDealsRes = await fetch(`/api/hotels/${hotelId}/regular-deals`, { cache: 'no-store' });
+        setRegularDeals(regularDealsRes.ok ? await regularDealsRes.json() : []);
+
+        const minibarRes = await fetch(`/api/hotels/${hotelId}/minibar`, { cache: 'no-store' });
+        setMinibarItems(minibarRes.ok ? await minibarRes.json() : []);
 
         if (hotelId === 'demo-hotel-123') {
-          setHotelName('The Grand Mumbai')
-        } else {
-          setHotelName('Your Hotel')
+          setHotelName('The Grand Mumbai');
         }
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error fetching data:', error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    void fetchData()
-  }, [hotelId])
+    fetchData();
+  }, [hotelId]);
 
   const handleRoomRequest = async (title: string) => {
     try {
@@ -753,3 +732,5 @@ export default async function GuestPortalPage({ params }: PageProps) {
     </main>
   )
 }
+
+

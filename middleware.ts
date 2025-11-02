@@ -1,23 +1,31 @@
-// middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+const AUTH_ROUTES = ["/dashboard", "/app", "/hotels", "/admin"]; // Add more as needed
+const loginPage = "/login"; // Adjust path if needed (e.g., /auth/signin)
 
-  // Bypass authentication for development/pilot
-  // Remove this when you have proper domain + email
-  if (pathname.startsWith('/owner')) {
-    // Allow all owner routes without auth for now
-    return NextResponse.next()
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const { pathname } = req.nextUrl;
+
+  // Only protect app routes (add more as your app grows)
+  const needsAuth = AUTH_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  if (needsAuth && !token) {
+    // Not authenticated – redirect to login
+    const loginUrl = req.nextUrl.clone();
+    loginUrl.pathname = loginPage;
+    loginUrl.searchParams.set("callbackUrl", pathname); // Optional: return after login
+    return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next()
+  // All good, continue
+  return NextResponse.next();
 }
 
+// Specify which routes use this middleware
 export const config = {
-  matcher: [
-    '/owner/:path*',
-    '/api/tasks/:path*',
-  ],
-}
+  matcher: ["/dashboard/:path*", "/app/:path*", "/hotels/:path*", "/admin/:path*"],
+};
