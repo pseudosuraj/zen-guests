@@ -1,61 +1,109 @@
-import ProductHero from '@/components/products/ProductHero'
-import FeatureShowcase from '@/components/products/FeatureShowcase'
-import PilotOfferSection from '@/components/marketing/homepage/PilotOfferSection'
+import Navbar from "@/components/marketing/Navbar";
+import Footer from "@/components/marketing/Footer";
+import { TrendingUp, Zap, Star } from "lucide-react";
 
 export default function ProductsPage() {
   return (
-    <main className="bg-background pt-20">
-      <ProductHero />
-
-      <FeatureShowcase
-        imageSrc="/mockups/upsell.png"
-        title="The Proactive Upsell Engine"
-        description="Stop leaving money on the table. Our AI-powered engine automatically offers the right upsell to the right guest at the right time—from pre-arrival upgrades to in-stay packages."
-        bullets={[
-          'Personalized offers for every guest',
-          'Automated delivery via web & WhatsApp',
-          'Full revenue tracking and analytics',
-        ]}
-      />
-
-      <FeatureShowcase
-        imageSrc="/mockups/digital-minibar.png"
-        title="The Digital Minibar"
-        description="Reinvent your in-room sales. Guests can browse and order from a beautiful digital menu, with every purchase instantly tracked. No more manual checks, no more lost revenue."
-        bullets={[
-          'Visual menu on guest device',
-          'Easy UPI & card payments',
-          'Auto-notification to staff and managers',
-        ]}
-        reverse
-      />
-
-      <FeatureShowcase
-        imageSrc="/mockups/marketplace.png"
-        title="The In-House Marketplace"
-        description="Why let guests order from Swiggy? Our marketplace turns your hotel into a premium fulfillment center for local food and services. You control the experience and, for the first time, you earn a commission on every order."
-        bullets={[
-          'Local F&B, groceries, laundry, and more',
-          'Direct hotel commission on all orders',
-          'Guest experience stays fully white-labeled',
-        ]}
-      />
-
-      <FeatureShowcase
-        imageSrc="/mockups/tasks.png"
-        title="The Staff Task Manager"
-        description="End the front desk chaos. Every guest request—from a chat message to a minibar order—is instantly converted into a trackable task and sent to the right staff member’s phone."
-        bullets={[
-          'Real-time, mobile-first staff assignment',
-          'Task tracking, reminders, and fulfillment SLAs',
-          'All activity visible to managers and owners',
-        ]}
-        reverse
-      />
-
-      <div className="mt-14">
-        <PilotOfferSection />
-      </div>
-    </main>
-  )
+    <>
+      <Navbar />
+      <main className="flex-grow pt-20 max-w-4xl mx-auto px-4">
+        {/* Hero */}
+        <section className="mb-14 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">Our Products</h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            The Zen-Guests platform brings delight and efficiency to every stay. Explore our three core solutions—designed for maximum revenue, perfect operations, and unforgettable local guest experiences.
+          </p>
+        </section>
+        {/* Revenue Engine */}
+        <section className="flex flex-col md:flex-row items-center gap-6 mb-16">
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold flex items-center gap-2 mb-2">
+              <TrendingUp className="w-6 h-6 text-purple-600" />
+              Revenue Engine
+            </h2>
+            <p className="mb-2 text-gray-700">
+              Maximize every stay with instant up-sell tools, automatic revenue tracking, and a seamless guest purchase experience.
+            </p>
+            <ul className="list-disc ml-5 text-primary-blue text-sm mb-2">
+              <li>Launch offers and up-sells in seconds—no IT support needed</li>
+              <li>Every guest sees only what's relevant for their room and booking</li>
+              <li>Real-time notifications for every purchase</li>
+              <li>Fully integrated UPI & digital payments</li>
+            </ul>
+            <div className="mt-2 text-sm">
+              <span className="inline-flex items-center gap-2 text-green-700">
+                <TrendingUp className="w-5 h-5" />
+                +27% Average Increase in Ancillary Revenue
+              </span>
+            </div>
+          </div>
+          <img
+            src="/images/products-revenue-engine.png"
+            alt="Revenue Engine"
+            className="w-[300px] h-[220px] object-contain rounded-xl bg-white border"
+          />
+        </section>
+        {/* Operational Zen Engine */}
+        <section className="flex flex-col md:flex-row-reverse items-center gap-6 mb-16">
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold flex items-center gap-2 mb-2">
+              <Zap className="w-6 h-6 text-yellow-600" />
+              Operational Zen Engine
+            </h2>
+            <p className="mb-2 text-gray-700">
+              No more WhatsApp chaos. Assign, track, and close guest requests from one simple dashboard—everyone's accountable, nothing gets missed.
+            </p>
+            <ul className="list-disc ml-5 text-primary-blue text-sm mb-2">
+              <li>Centralized, real-time assignment of all guest and housekeeping tasks</li>
+              <li>Team progress and completion tracked at every stage</li>
+              <li>Automatic alerts for overdue or urgent issues</li>
+              <li>Management insights to prevent recurring bottlenecks</li>
+            </ul>
+            <div className="mt-2 text-sm">
+              <span className="inline-flex items-center gap-2 text-blue-700">
+                <Zap className="w-5 h-5" />
+                5-Minute Average Resolution Time for Guest Requests
+              </span>
+            </div>
+          </div>
+          <img
+            src="/images/products-operations-engine.png"
+            alt="Operations Engine"
+            className="w-[300px] h-[220px] object-contain rounded-xl bg-white border"
+          />
+        </section>
+        {/* Hyper-Local Experience Engine */}
+        <section className="flex flex-col md:flex-row items-center gap-6 mb-16">
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold flex items-center gap-2 mb-2">
+              <Star className="w-6 h-6 text-orange-600" />
+              Hyper-Local Experience Engine
+            </h2>
+            <p className="mb-2 text-gray-700">
+              Connect every guest to local cuisine, spa, and curated experiences—your property becomes the centerpiece of their trip.
+            </p>
+            <ul className="list-disc ml-5 text-primary-blue text-sm mb-2">
+              <li>Dynamic menus, spa, and minibar updated with one tap</li>
+              <li>Personalized upsells based on guest preferences</li>
+              <li>Integrated feedback and instant review requests</li>
+              <li>Direct chat with staff, concierge, or management</li>
+            </ul>
+            <div className="mt-2 text-sm">
+              <span className="inline-flex items-center gap-2 text-purple-700">
+                <Star className="w-5 h-5" />
+                9.2/10 Average Guest Experience Rating
+              </span>
+            </div>
+          </div>
+          <img
+            src="/images/products-experience-engine.png"
+            alt="Experience Engine"
+            className="w-[300px] h-[220px] object-contain rounded-xl bg-white border"
+          />
+        </section>
+        <div className="mb-16" />
+      </main>
+      <Footer />
+    </>
+  );
 }
