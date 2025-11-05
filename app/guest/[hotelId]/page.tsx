@@ -1,6 +1,7 @@
 'use client';
 
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,8 +38,9 @@ interface MinibarItem {
   stockQuantity?: number;
 }
 
-export default function GuestPortalPage({ params }: { params: { hotelId: string } }) {
-  const hotelId = params.hotelId;
+export default function GuestPortalPage() {
+  const params = useParams();
+  const hotelId = params.hotelId as string;
 
   const [deals, setDeals] = useState<UpsellDeal[]>([]);
   const [regularDeals, setRegularDeals] = useState<RegularDeal[]>([]);

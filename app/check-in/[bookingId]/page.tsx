@@ -1,6 +1,7 @@
 "use client"
 
-import { use, useState } from "react"
+import { useState } from "react"
+import { useParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,45 +9,42 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Upload } from "lucide-react"
 
-interface CheckInPageProps {
-  params: { bookingId: string }
-}
+export default function CheckInPage() {
+  const params = useParams();
+  const bookingId = params.bookingId as string;
 
-export default function CheckInPage({ params }: CheckInPageProps) {
-  const { bookingId } = params;
-  
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(1);
   const [guestData, setGuestData] = useState({
     fullName: "Rajesh Kumar",
     phoneNumber: "+91 98765 43210",
     idDocument: null as File | null,
-  })
+  });
 
-  const totalSteps = 2
-  const progressPercentage = (currentStep / totalSteps) * 100
+  const totalSteps = 2;
+  const progressPercentage = (currentStep / totalSteps) * 100;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null
-    setGuestData({ ...guestData, idDocument: file })
-  }
+    const file = e.target.files?.[0] || null;
+    setGuestData({ ...guestData, idDocument: file });
+  };
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
     }
-  }
+  };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
+      setCurrentStep(currentStep - 1);
     }
-  }
+  };
 
   const handleSubmit = () => {
     // TODO: Implement submission logic
-    console.log("Form submitted with data:", guestData)
-    alert("Check-in submitted successfully! (Demo mode)")
-  }
+    console.log("Form submitted with data:", guestData);
+    alert("Check-in submitted successfully! (Demo mode)");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
